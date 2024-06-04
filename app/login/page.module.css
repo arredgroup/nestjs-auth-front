@@ -1,0 +1,17 @@
+
+.flex-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.login-box {
+    flex: 1 1 auto;
+    width: 300px;
+}
+
+.login-box-child {
+    flex: 1 1 auto;
+    margin: 0.5rem;
+}
