@@ -4,12 +4,14 @@ import {Card, CardContent, Container} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
 import SimpleSnackbar from '../../components/SimpleSnackbar';
+import { useRouter } from 'next/navigation';
 
 import AuthService from '../../services/AuthService';
 
 import './page.css';
 
 export default function Login(){
+    const router = useRouter();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,6 +20,13 @@ export default function Login(){
     const handleLogin = async () => {
         const login = await AuthService.handleLogin(email, password);
         setState(login);
+        if(login){
+            router.push('/users');
+        }
+    }
+
+    const handleRegister = () => {
+        router.push('/register');
     }
 
     return (
@@ -27,7 +36,8 @@ export default function Login(){
                     <div className={"login-box-child"}>
                         <h1>Inicia Sesión</h1>
                     </div>
-                    <SimpleSnackbar message={"Usuario o contraseña incorrectos"} openSnack={!state} closeSnack={() => setState(true)}/>
+                    <SimpleSnackbar message={"Usuario o contraseña incorrectos"} openSnack={!state}
+                                    closeSnack={() => setState(true)}/>
                     <div className={"login-box-child"}>
                         <TextField
                             id="outlined-basic"
@@ -49,7 +59,10 @@ export default function Login(){
                         />
                     </div>
                     <div className={"login-box-child"}>
-                        <Button onClick={handleLogin}>Iniciar Sesión</Button>
+                        <Button onClick={handleLogin} variant="contained">Iniciar Sesión</Button>
+                    </div>
+                    <div className={"login-box-child"}>
+                        <Button onClick={handleRegister}>Registrar</Button>
                     </div>
                 </CardContent>
             </Card>

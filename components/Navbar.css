@@ -1,0 +1,17 @@
+@import '../app/globals.css';
+
+.navbar {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    justify-content: space-between;
+    background: var(--primary-100);
+    padding: 1rem;
+}
+
+.navbar-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
