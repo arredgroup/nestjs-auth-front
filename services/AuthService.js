@@ -51,16 +51,13 @@ const getUsers = async () => {
     }
 }
 
-const getUserById = async (id) => {
+const getUserById = async (id, token) => {
     try {
-        //const response = await axios.get('fakeapi');
-        const response = {
-            data: {
-                name: 'muhammad fake',
-                email: 'a@b.cl',
-                status: true,
+        const response = await axios.get('http://localhost:3001/api/v1/users/' + id, {
+            headers: {
+                token,
             }
-        };
+        });
         return response.data;
     } catch(e){
         console.error(e);
@@ -103,10 +100,25 @@ const registerUser = async (name, email, password, password_second, cellphone) =
     }
 }
 
+const updateUser = async (id, user, token) => {
+    try {
+        const response = await axios.put('http://localhost:3001/api/v1/users/' + id, user, {
+            headers: {
+                token,
+            }
+        });
+        return (response.status === 200);
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
 export default {
     handleLogin,
     getUsers,
     getUserById,
     logOut,
     registerUser,
+    updateUser,
 };

@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import AuthService from "@/services/AuthService";
 import {Container, Switch} from "@mui/material";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 const Edit = (props) => {
     const {id} = props.params;
@@ -13,6 +14,7 @@ const Edit = (props) => {
     const [editedUser, setEditedUser] = useState({
         name: '',
         email: '',
+        cellphone: '',
         status: true
     });
 
@@ -23,9 +25,18 @@ const Edit = (props) => {
         });
     }
 
-    useEffect(() => {
+    const handleUpdate = () => {
+        const token = localStorage.getItem('token');
         (async () => {
-            const data = await AuthService.getUserById(id);
+            const data = await AuthService.updateUser(id, editedUser, token);
+            console.log(data);
+        })();
+    }
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        (async () => {
+            const data = await AuthService.getUserById(id, token);
             setUser(data);
             setEditedUser(data);
         })();
@@ -48,14 +59,21 @@ const Edit = (props) => {
                     variant="outlined"
                     value={editedUser.email} onChange={(e) => handleChange(e.target.value, 'email')}
                 />
+                <TextField
+                    label="Celular"
+                    name="cellphone"
+                    variant="outlined"
+                    value={editedUser.cellphone}
+                    onChange={(e) => handleChange(e.target.value, 'cellphone')}
+                />
                 <Switch
                     name="status"
                     checked={editedUser.status}
                     value={editedUser.status}
                     onChange={(e) => handleChange(e.target.checked, 'status')}
                 />
+                <Button type="outline" onClick={handleUpdate}>Actualizar</Button>
             </Container>}
-            {JSON.stringify(editedUser)}
         </div>
     )
 }

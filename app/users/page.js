@@ -14,11 +14,28 @@ export default function Users(){
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        (async () => {
-            const data = await AuthService.getUsers();
-            setUsers(data);
-        })();
+        const user = JSON.parse(localStorage.getItem('user'));
+        if(!user){
+            router.push('/login');
+        }
+        if(user?.roles?.includes('admin')){
+            getAllUsers();
+        }
+        if(user?.roles?.includes('user')){
+            getUser(user.id);
+        }
     }, []);
+
+    const getAllUsers = async () => {
+        const data = await AuthService.getUsers();
+        setUsers(data);
+    }
+
+    const getUser = async (id) => {
+        const token = localStorage.getItem('token');
+        const data = await AuthService.getUserById(id, token);
+        setUsers([data]);
+    }
 
     const handleEdit = (user) => {
         router.push('/users/' + user.id + '/edit');

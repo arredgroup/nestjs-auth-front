@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './Navbar.css';
 import Button from '@mui/material/Button';
 import AuthService from '@/services/AuthService';
@@ -6,7 +6,11 @@ import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
     const router = useRouter();
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+    const [user, setUser] = useState({name:""});
+
+    useEffect(() => {
+        setUser(JSON.parse(localStorage.getItem('user')));
+    }, []);
 
     const handleLogout = async () => {
         const token = localStorage.getItem('token');
