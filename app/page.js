@@ -11,6 +11,8 @@ export default function Home() {
         const user = localStorage.getItem('user');
         if (user) {
             router.push('/users');
+        }else{
+            router.push('/login');
         }
     }, []);
 
