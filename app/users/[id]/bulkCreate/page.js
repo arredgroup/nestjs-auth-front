@@ -1,5 +1,4 @@
 "use client"
-
 import Navbar from '@/components/Navbar';
 import React, {useEffect, useState} from 'react';
 
@@ -22,16 +21,17 @@ const Search = (props) => {
     }, []);
 
     return (
-        <div>
+        <Container>
         <Navbar />
-        <Stack justifyContent={'center'} alignItems={'center'}>
-
-            {!user ? "No hay datos" : <Container>
+       
+            {!user ? "No hay datos" : 
+            <Container>
+                 <Stack justifyContent={'center'} alignItems={'center'}>
                 <h1>bulkCreate {id}</h1> 
                 <Button></Button>
-            </Container>}
-        </Stack>
-        </ div>
+                </Stack>
+            </Container>}    
+        </ Container>
     )
 }
 

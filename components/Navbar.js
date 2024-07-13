@@ -30,7 +30,7 @@ const Navbar = () => {
     }
 
     return (
-        <div className="navbar">
+        <div className="navbar" style={{marginTop: '20px'}}>
             <div className="navbar-item">
                 {user?.name}
             </div>
