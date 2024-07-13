@@ -27,7 +27,8 @@ export default function Users(){
     }, []);
 
     const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
+        const token = localStorage.getItem("token");
+        const data = await AuthService.getUsers(token);
         setUsers(data);
     }
 
@@ -45,6 +46,8 @@ export default function Users(){
         <Container>
             <Navbar />
             <h1>Users</h1>
+            <button onClick={() => router.push('/users/findUsers')}>Find Users</button>
+            <button onClick={() => router.push('/users/bulkCreate')}>Bulk Create</button>
             <Table>
                 <TableHead>
                     <TableRow>
