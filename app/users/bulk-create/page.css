@@ -1,0 +1,8 @@
+input {
+    margin: 10px;
+}
+
+.form-input input {
+    width: 150px;
+    height: 20px;
+}
