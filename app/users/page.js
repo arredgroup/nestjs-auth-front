@@ -37,13 +37,13 @@ export default function Users() {
     const getAllUsers = async () => {
         const token = localStorage.getItem("token");
         const data = await AuthService.getUsers(token);
-        setUsers(data);
+        setUsers(data.message);
     };
 
     const getUser = async (id) => {
         const token = localStorage.getItem("token");
         const data = await AuthService.getUserById(id, token);
-        setUsers([data]);
+        setUsers([data.message]);
     };
 
     const handleEdit = (user) => {

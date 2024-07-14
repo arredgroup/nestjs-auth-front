@@ -31,7 +31,7 @@ export default function BulkCreateUsers() {
     const createUsers = async () => {
         const token = localStorage.getItem("token");
         const response = await AuthService.bulkCreateUsers(token, users);
-        setMessage(response);
+        setMessage(response.message);
         setOpenSnack(true);
     };
 

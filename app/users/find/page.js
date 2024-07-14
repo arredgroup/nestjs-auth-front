@@ -37,7 +37,7 @@ export default function FindUsers() {
     const getFilteredUsers = async () => {
         const token = localStorage.getItem("token");
         const data = await AuthService.findUsers(token, query);
-        setUsers(data);
+        setUsers(data.message);
     };
 
     return (
