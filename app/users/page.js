@@ -27,7 +27,8 @@ export default function Users(){
     }, []);
 
     const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
+        const token = localStorage.getItem('token');
+        const data = await AuthService.getUsers(token);
         setUsers(data);
     }
 
