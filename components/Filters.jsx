@@ -24,7 +24,7 @@ const Filters = ({active = false, onChange = ()=>{},name, onNameChange = () =>{}
     <Grid container spacing={4} padding={10}>
       <Grid xs={6} padding={2}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <InputLabel id="demo-simple-select-label">Activo</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
