@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 
 import AuthService from "@/services/AuthService";
-import {Container, Stack, Switch} from "@mui/material";
+import {Container, Table, TableBody, TableCell, TableHead, TableRow, Stack, Switch} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -15,27 +15,61 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 const Search = (props) => {
     const {id} = props.params;
     const [user, setUser] = useState(null);
-    const [loginBeforeDate, setloginBeforeDate] = useState(dayjs('2022-04-17'));
-    const [loginAfterDate, setloginAfterDate] = useState(dayjs('2022-04-18'));
+    const [loginBeforeDate, setLoginBeforeDate] = useState(null);
+    const [loginAfterDate, setLoginAfterDate] = useState(null);
     const [name, setName] = useState('');
     const [status, setStatus] = useState(true);
 
+    const [users, setUsers] = useState([]);
+
+
     useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if(!user){
+            router.push('/login');
+        }
         const token = localStorage.getItem('token');
         (async () => {
-            const data = await AuthService.getUserById(id, token);
-            setUser(data);
+            const data = await AuthService.getFindUsers([], token);
+            setUsers(data);
         })();
     }, []);
 
-    const handleSumbit = () => {}
-
-    return (
+    const handleSumbit = () => {
+        const filter = {};
+        if(name){
+            filter.name = name;
+        }
+        if(loginBeforeDate){
+            filter.Before = loginBeforeDate;
+        }
+        if(loginAfterDate){
+            filter.After = loginAfterDate;
+        }
+        if(status){
+            filter.status = status;
+        }
+        const token = localStorage.getItem('token');
+        (async () => {
+            const data = await AuthService.getFindUsers(filter, token);
+            setUsers(data);
+        })();
         
+    }
 
+    const handleClearFilters = async () => {
+        setName('');
+        setLoginBeforeDate(null);
+        setLoginAfterDate(null);
+        setStatus(true);
+        const token = localStorage.getItem('token');
+        const data = await AuthService.getFindUsers([], token);
+        setUsers(data);
+    };
+    return (
         <Container>
         <Navbar />
-            {!user ? "No hay datos" : 
+            {!users ? "No hay datos" : 
             <Container style={{ marginTop: 30 }}>
                  <Stack justifyContent={'center'} alignItems={'center'}>
                     <Stack direction={'row'} spacing={3}>
@@ -50,12 +84,14 @@ const Search = (props) => {
                         <DatePicker 
                             label="Logeado despues"
                             value={loginBeforeDate}
-                            onChange={(newValue) => setloginBeforeDate(newValue)}
+                            format="DD-MM-YYYY"
+                            onChange={(newValue) => setLoginBeforeDate(newValue)}
                          />
                            <DatePicker 
                             label="Logeado antes"
                             value={loginAfterDate}
-                            onChange={(newValue) => setloginAfterDate(newValue)}
+                            format="DD-MM-YYYY"
+                            onChange={(newValue) => setLoginAfterDate(newValue)}
                          />
                          </LocalizationProvider>
                          <Switch
@@ -65,9 +101,36 @@ const Search = (props) => {
                             onChange={(e) => setStatus(e.target.checked)}
                             />
                          <Button variant="contained" onClick={handleSumbit}>Filtrar</Button>
+                         <Button variant="contained" onClick={handleClearFilters}>Limpiar Filtros</Button>
                          </Stack>
+
                     </Stack>
             </Container>}    
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Nombre</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Estado</TableCell>
+                        <TableCell>Última Sesión</TableCell>
+                        <TableCell>Acciones</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {
+                        users.map((user) => (
+                            <TableRow key={user}>
+                                <TableCell>{user.name}</TableCell>
+                                <TableCell>{user.email}</TableCell>
+                                <TableCell>{user.status? 'ACTIVO' : 'CERRADO'}</TableCell>
+                                <TableCell>{dayjs(user.updatedAt).format('DD-MM-YYYY HH:mm:ss')}</TableCell>
+                                <TableCell> logiado
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    }
+                </TableBody>
+            </Table>
         </ Container>
     )
 }

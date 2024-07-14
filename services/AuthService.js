@@ -65,6 +65,21 @@ const getUserById = async (id, token) => {
     }
 }
 
+const getFindUsers = async (filters, token) => {
+    const query = new URLSearchParams(filters).toString();
+    try {
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers?' + query, {
+            headers: {
+                token,
+            }
+        });
+        return response.data;
+    } catch(e){
+        console.error(e);
+        return null;
+    }
+}
+
 const logOut = async (token) => {
     try {
         const response = await axios.post('http://localhost:3001/api/v1/auth/logout', {}, {
@@ -115,6 +130,7 @@ const updateUser = async (id, user, token) => {
 }
 
 export default {
+    getFindUsers,
     handleLogin,
     getUsers,
     getUserById,

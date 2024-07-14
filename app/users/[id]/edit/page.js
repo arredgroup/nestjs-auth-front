@@ -6,7 +6,7 @@ import {Edit} from "@mui/icons-material";
 
 import AuthService from "@/services/AuthService";
 import { useRouter } from 'next/navigation';
-import Navbar from '@/components/Navbar';
+import Navbar from '/components/Navbar';
 
 export default function Users(){
 
