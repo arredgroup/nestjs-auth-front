@@ -100,6 +100,22 @@ const logOut = async (token) => {
     }
 }
 
+const registerBulkUsers = async (users, token) => {
+    try{
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate',{
+            users,
+            headers:{
+                'token': token,
+            }
+            }
+        );
+        return (response.status === 200);
+    }catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
 const registerUser = async (name, email, password, password_second, cellphone) => {
     try{
         const response = await axios.post('http://localhost:3001/api/v1/auth/register', {
@@ -131,6 +147,7 @@ const updateUser = async (id, user, token) => {
 }
 
 export default {
+    registerBulkUsers,
     getFindUsers,
     handleLogin,
     getUsers,
