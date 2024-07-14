@@ -1,15 +1,20 @@
 "use client"
 import Navbar from '@/components/Navbar';
 import React, {useEffect, useState} from 'react';
+import SimpleSnackbar from '@/components/SimpleSnackbar';
+import { useRouter } from 'next/navigation';
 
 import AuthService from "@/services/AuthService";
 import {Container, Stack, TextField, Button, IconButton, Typography} from "@mui/material";
 import { Delete } from "@mui/icons-material";
 
 const BulkUserCreate = (props) => {
+    const router = useRouter();
     const {id} = props.params;
     const [user, setUser] = useState(null);
     const [users, setUsers] = useState([{ name: '', email: '' , password: '', cellphone: ''}]);
+    const [snackbarOpen, setSnackbarOpen] = useState(false); 
+    const [snackbarMessage, setSnackbarMessage] = useState(''); 
 
     useEffect(() => {
         //Comprobación de token expiración
@@ -23,6 +28,7 @@ const BulkUserCreate = (props) => {
         const currentTime = new Date();
         
         if (currentTime >= expirationTime) {
+
                 console.log('El token ha expirado');
                 localStorage.removeItem('user');
                 localStorage.removeItem('token');
@@ -52,8 +58,18 @@ const BulkUserCreate = (props) => {
     const handleRegister = async () => {
         const token = localStorage.getItem('token');
         const response = await AuthService.registerBulkUsers(users, token);
+        setSnackbarMessage(response);
+        setSnackbarOpen(true);
         console.log(response);
+        router.push('/users');
     }
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
     return (
         <Container>
         <Navbar />
@@ -109,9 +125,10 @@ const BulkUserCreate = (props) => {
                         <Button variant="contained"  disabled={users.some(user => !user.name.trim() || !user.email.trim() || !user.password.trim() || !user.cellphone.trim())} onClick={handleRegister}>Crear</Button>
                         <Button variant="contained" onClick={handleAddUser}>Añadir</Button>
                          </Stack>
-
+                         
                     </Stack>
             </Container>}    
+            <SimpleSnackbar open={snackbarOpen} message={snackbarMessage} onClose={handleCloseSnackbar} />
         </ Container>
     )
 }

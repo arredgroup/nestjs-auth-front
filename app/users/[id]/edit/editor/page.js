@@ -1,12 +1,14 @@
 "use client"
 import React, {useEffect, useState} from 'react';
 
+import { useRouter } from 'next/navigation';
 import AuthService from "@/services/AuthService";
 import {Container, Switch} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 const Edit = (props) => {
+    const router = useRouter();
     const {id} = props.params;
 
     const [user, setUser] = useState(null);

@@ -2,6 +2,7 @@
 import Navbar from '@/components/Navbar';
 import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 
 import AuthService from "@/services/AuthService";
 import {Container, Table, TableBody, TableCell, TableHead, TableRow, Stack, Switch, Typography, TextField, Button} from "@mui/material";
@@ -9,6 +10,7 @@ import { LocalizationProvider , DatePicker} from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const Search = (props) => {
+    const router = useRouter();
     const {id} = props.params;
     const [user, setUser] = useState(null);
     const [loginBeforeDate, setLoginBeforeDate] = useState(null);
