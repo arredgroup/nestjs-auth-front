@@ -41,19 +41,21 @@ const Search = (props) => {
             filter.name = name;
         }
         if(loginBeforeDate){
-            filter.Before = loginBeforeDate;
+            filter.before = dayjs(loginBeforeDate).format('YYYY-MM-DD');
         }
         if(loginAfterDate){
-            filter.After = loginAfterDate;
+            filter.after = dayjs(loginAfterDate).format('YYYY-MM-DD');
         }
         if(status){
             filter.status = status;
         }
+        console.log(filter);
         const token = localStorage.getItem('token');
         (async () => {
             const data = await AuthService.getFindUsers(filter, token);
             setUsers(data);
-        })();
+        
+        })()    ;
         
     }
 
