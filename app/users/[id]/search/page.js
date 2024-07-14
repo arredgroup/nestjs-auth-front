@@ -38,6 +38,11 @@ const Search = (props) => {
 
     const handleSumbit = () => {
         const filter = {};
+        console.log(status);
+        if(status !== null){
+            console.log(status);
+            filter.status = status;
+        }
         if(name){
             filter.name = name;
         }
@@ -47,12 +52,10 @@ const Search = (props) => {
         if(loginAfterDate){
             filter.after = dayjs(loginAfterDate).format('YYYY-MM-DD');
         }
-        if(status){
-            filter.status = status;
-        }
         const token = localStorage.getItem('token');
         (async () => {
             const data = await AuthService.getFindUsers(filter, token);
+            console.log(data);
             setUsers(data);
         })()    ;
         
