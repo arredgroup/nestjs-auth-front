@@ -18,6 +18,23 @@ const handleLogin = async (user, pass) => {
     }
 }
 
+const findUsers = async ({ name, login_before_date, login_after_date, active }) => {
+    try {
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers', {
+            params: {
+                nombre: name,
+                antesSesion: login_before_date,
+                despuesSesion: login_after_date,
+                eliminados: active,
+            },
+        });
+        return response.data;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+};
+
 const getUsers = async () => {
     try {
         //const response = await axios.get('fakeapi');
@@ -116,6 +133,7 @@ const updateUser = async (id, user, token) => {
 
 export default {
     handleLogin,
+    findUsers,
     getUsers,
     getUserById,
     logOut,

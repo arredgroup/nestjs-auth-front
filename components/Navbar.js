@@ -26,9 +26,13 @@ const Navbar = () => {
                 {user?.name}
             </div>
             <div className="navbar-item">
+                <Button onClick={() => {router.push("/users/findusers")}}>
+                    Find Users
+                </Button>
                 <Button onClick={handleLogout}>
                     Logout
                 </Button>
+                
             </div>
         </div>
     )
