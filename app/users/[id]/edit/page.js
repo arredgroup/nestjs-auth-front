@@ -44,7 +44,7 @@ export default function Users(){
     return (
         <Container>
             <Navbar />
-            <h1>Users</h1>
+            <h1>Editor de usuario</h1>
             <Table>
                 <TableHead>
                     <TableRow>

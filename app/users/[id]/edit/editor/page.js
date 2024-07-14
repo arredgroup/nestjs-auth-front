@@ -36,15 +36,22 @@ const Edit = (props) => {
     useEffect(() => {
         //Comprobación de token expiración
         const user = JSON.parse(localStorage.getItem('user'));
+        if(!user){
+            console.log('No hay usuario');
+            router.push('/login');
+        }else{
+        
         const expirationTime = new Date(user.expiration);
         const currentTime = new Date();
+        
         if (currentTime >= expirationTime) {
-            console.log('El token ha expirado');
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            router.push('/login');
-            return;
-            }
+                console.log('El token ha expirado');
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                router.push('/login');
+                return;
+        }
+    }
         const token = localStorage.getItem('token');
         (async () => {
             const data = await AuthService.getUserById(id, token);
@@ -55,7 +62,7 @@ const Edit = (props) => {
 
     return (
         <div>
-            <h1>Edit user {id}</h1>
+            <h1>Editar usuario {id}</h1>
             { !user ? "No hay datos" : <Container>
                 <TextField
                     label="Nombre"

@@ -14,25 +14,23 @@ export default function Users(){
     useEffect(() => {
         //Comprobación de token expiración
         const user = JSON.parse(localStorage.getItem('user'));
+        if(!user){
+            console.log('No hay usuario');
+            router.push('/login');
+        }else{
+        
         const expirationTime = new Date(user.expiration);
         const currentTime = new Date();
-
+        
         if (currentTime >= expirationTime) {
-            console.log('El token ha expirado');
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            router.push('/login');
-            return;
+                console.log('El token ha expirado');
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                router.push('/login');
+                return;
         }
-        if(!user){
-            router.push('/login');
-        }
-        if(user?.roles?.includes('admin')){
-            getAllUsers();
-        }
-        if(user?.roles?.includes('user')){
-            getUser(user.id);
-        }
+        getUser(user.id);
+    }
     }, []);
 
     const getAllUsers = async () => {
@@ -47,7 +45,7 @@ export default function Users(){
     }
 
     return (
-        <Container>
+        <Container style={{justifyContent: 'center', alignItems: 'center'}}>
             <Navbar />
             <h1>Inicio</h1>
         </Container>

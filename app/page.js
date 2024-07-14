@@ -11,16 +11,22 @@ export default function Home() {
     useEffect(() => {
         //Comprobación de token expiración
         const user = JSON.parse(localStorage.getItem('user'));
+        if(!user){
+            console.log('No hay usuario');
+            router.push('/login');
+        }else{
+        
         const expirationTime = new Date(user.expiration);
         const currentTime = new Date();
-
+        
         if (currentTime >= expirationTime) {
-            console.log('El token ha expirado');
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            router.push('/login');
-            return;
+                console.log('El token ha expirado');
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                router.push('/login');
+                return;
         }
+    }
         if (user) {
             router.push('/users');
         }else{

@@ -3,10 +3,7 @@ import Navbar from '@/components/Navbar';
 import React, {useEffect, useState} from 'react';
 
 import AuthService from "@/services/AuthService";
-import {Container, Stack} from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import IconButton from '@mui/material/IconButton';
+import {Container, Stack, TextField, Button, IconButton, Typography} from "@mui/material";
 import { Delete } from "@mui/icons-material";
 
 const BulkUserCreate = (props) => {
@@ -15,10 +12,24 @@ const BulkUserCreate = (props) => {
     const [users, setUsers] = useState([{ name: '', email: '' , password: '', cellphone: ''}]);
 
     useEffect(() => {
+        //Comprobación de token expiración
         const user = JSON.parse(localStorage.getItem('user'));
         if(!user){
+            console.log('No hay usuario');
             router.push('/login');
+        }else{
+        
+        const expirationTime = new Date(user.expiration);
+        const currentTime = new Date();
+        
+        if (currentTime >= expirationTime) {
+                console.log('El token ha expirado');
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                router.push('/login');
+                return;
         }
+    }
         const token = localStorage.getItem('token');
         (async () => {
             const data = await AuthService.getUserById(id, token);
@@ -49,6 +60,7 @@ const BulkUserCreate = (props) => {
             {!users ? "No hay datos" : 
             <Container style={{ marginTop: 30 }}>
                  <Stack justifyContent={'center'} alignItems={'center'} spacing={4}>
+                 <Typography variant="h3" sx={{ marginBottom: 5 }}>Creador de usuarios</Typography>
                  {users.map((user, index) => (
                     <Stack key={index} direction="row" spacing={2}>
                         <TextField

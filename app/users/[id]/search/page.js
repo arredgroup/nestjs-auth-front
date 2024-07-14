@@ -4,13 +4,9 @@ import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 
 import AuthService from "@/services/AuthService";
-import {Container, Table, TableBody, TableCell, TableHead, TableRow, Stack, Switch} from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {Container, Table, TableBody, TableCell, TableHead, TableRow, Stack, Switch, Typography, TextField, Button} from "@mui/material";
+import { LocalizationProvider , DatePicker} from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
 
 const Search = (props) => {
     const {id} = props.params;
@@ -26,6 +22,11 @@ const Search = (props) => {
     useEffect(() => {
         //Comprobación de token expiración
         const user = JSON.parse(localStorage.getItem('user'));
+        if(!user){
+            console.log('No hay usuario');
+            router.push('/login');
+        }else{
+        
         const expirationTime = new Date(user.expiration);
         const currentTime = new Date();
         
@@ -36,9 +37,7 @@ const Search = (props) => {
                 router.push('/login');
                 return;
         }
-        if(!user){
-            router.push('/login');
-        }
+    }
         const token = localStorage.getItem('token');
         (async () => {
             const data = await AuthService.getFindUsers([], token);
@@ -87,6 +86,7 @@ const Search = (props) => {
             {!users ? "No hay datos" : 
             <Container style={{ marginTop: 30 }}>
                  <Stack justifyContent={'center'} alignItems={'center'}>
+                    <Typography variant="h3" sx={{ marginBottom: 5 }}>Buscador</Typography>
                     <Stack direction={'row'} spacing={3}>
                         <TextField                     
                             label="Nombre"
