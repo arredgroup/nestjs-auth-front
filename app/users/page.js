@@ -18,16 +18,14 @@ export default function Users(){
         if(!user){
             router.push('/login');
         }
-        if(user?.roles?.includes('admin')){
-            getAllUsers();
-        }
         if(user?.roles?.includes('user')){
-            getUser(user.id);
+            getAllUsers();
         }
     }, []);
 
     const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
+        const token = localStorage.getItem('token');
+        const data = await AuthService.getFindUser('', token);
         setUsers(data);
     }
 

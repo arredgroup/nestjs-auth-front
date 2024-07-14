@@ -26,7 +26,22 @@ const Navbar = () => {
                 {user?.name}
             </div>
             <div className="navbar-item">
-                <Button onClick={handleLogout}>
+                <Button variant='contained' onClick={() => router.push('/create')}>
+                    Create Users
+                </Button>
+            </div>
+            <div className="navbar-item">
+                <Button variant='contained' onClick={() => router.push('/find')}>
+                    Find Users
+                </Button>
+            </div>
+            <div className="navbar-item">
+                <Button variant='contained' onClick={() => router.push('/users')}>
+                    All Users
+                </Button>
+            </div>
+            <div className="navbar-item">
+                <Button variant='contained' onClick={handleLogout} style={{backgroundColor: 'red'}}>
                     Logout
                 </Button>
             </div>

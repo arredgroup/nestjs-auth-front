@@ -18,6 +18,35 @@ const handleLogin = async (user, pass) => {
     }
 }
 
+const getFindUser = async (req, token) => {
+    try {
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers' + req, {
+            headers: {
+                token,
+            }
+        });
+        console.log(response.data);
+        return response.data;
+    } catch(e){
+        console.error(e);
+        return [];
+    }
+}
+
+const postBulkCreate = async (users, token) => {
+    try {
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', users, {
+            headers: {
+                token,
+            }
+        });
+        return response.status === 200;
+    } catch(e){
+        console.error(e);
+        return false;
+    }
+}
+
 const getUsers = async () => {
     try {
         //const response = await axios.get('fakeapi');
@@ -121,4 +150,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    getFindUser,
+    postBulkCreate
 };
