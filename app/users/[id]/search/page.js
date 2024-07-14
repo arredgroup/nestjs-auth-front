@@ -32,6 +32,7 @@ const Search = (props) => {
         (async () => {
             const data = await AuthService.getFindUsers([], token);
             setUsers(data);
+            
         })();
     }, []);
 
@@ -49,12 +50,10 @@ const Search = (props) => {
         if(status){
             filter.status = status;
         }
-        console.log(filter);
         const token = localStorage.getItem('token');
         (async () => {
             const data = await AuthService.getFindUsers(filter, token);
             setUsers(data);
-        
         })()    ;
         
     }
@@ -121,14 +120,15 @@ const Search = (props) => {
                 <TableBody>
                     {
                         users.map((user) => (
-                            <TableRow key={user}>
-                                <TableCell>{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.status? 'ACTIVO' : 'CERRADO'}</TableCell>
-                                <TableCell>{dayjs(user.updatedAt).format('DD-MM-YYYY HH:mm:ss')}</TableCell>
-                                <TableCell> logiado
-                                </TableCell>
-                            </TableRow>
+                            user.Sessions && user.Sessions.length > 0 ? (
+                                <TableRow key={user.id}>
+                                    <TableCell>{user.name}</TableCell>
+                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell>{user.status ? 'ACTIVO' : 'CERRADO'}</TableCell>
+                                    <TableCell>{dayjs(user.Sessions[0].expiration).format('DD-MM-YYYY HH:mm:ss')}</TableCell>
+                                    <TableCell>Logiado</TableCell>
+                                </TableRow>
+                            ) : null // No renderiza nada si no hay sesiones
                         ))
                     }
                 </TableBody>

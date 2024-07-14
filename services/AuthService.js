@@ -11,6 +11,7 @@ const handleLogin = async (user, pass) => {
         const decoded = atob(response.data);
         localStorage.setItem('token', response.data);
         localStorage.setItem('user', decoded);
+
         return true;
     } catch (e) {
         console.error(e);

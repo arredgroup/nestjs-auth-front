@@ -38,7 +38,7 @@ export default function Users(){
     }
 
     const handleEdit = (user) => {
-        router.push('/users/' + user.id + '/edit');
+        router.push('/users/' + user.id + '/edit/editor');
     }
 
     return (
