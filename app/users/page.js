@@ -27,7 +27,8 @@ export default function Users(){
     }, []);
 
     const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
+        const token = localStorage.getItem("token");
+        const data = await AuthService.getUsers(token);
         setUsers(data);
     }
 
@@ -43,7 +44,14 @@ export default function Users(){
 
     return (
         <Container>
+
+
             <Navbar />
+            <h1>Ejercicio 1</h1>
+            <button onClick={() => router.push('/users/findUsers')}>Find Users</button>
+
+            <h1>Ejercicio 2</h1>
+            <button onClick={() => router.push('/users/bulkCreate')}>bulk Create</button>
             <h1>Users</h1>
             <Table>
                 <TableHead>
@@ -51,7 +59,6 @@ export default function Users(){
                         <TableCell>Nombre</TableCell>
                         <TableCell>Email</TableCell>
                         <TableCell>Estado</TableCell>
-                        <TableCell>Última Sesión</TableCell>
                         <TableCell>Acciones</TableCell>
                     </TableRow>
                 </TableHead>
@@ -62,7 +69,6 @@ export default function Users(){
                                 <TableCell>{user.name}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{user.status? 'ACTIVO' : 'CERRADO'}</TableCell>
-                                <TableCell>TBD</TableCell>
                                 <TableCell>
                                     <IconButton color="primary" aria-label={"Editar usuario " + user.name} onClick={() => handleEdit(user)}>
                                         <Edit />

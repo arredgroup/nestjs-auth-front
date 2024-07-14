@@ -4,7 +4,7 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-const SimpleSnackbar = (props)  => {
+const SimpleSnackbar = (props) => {
     const { message, openSnack, closeSnack } = props;
 
     const handleClose = (event, reason) => {
