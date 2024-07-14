@@ -26,6 +26,9 @@ const Navbar = () => {
                 {user?.name}
             </div>
             <div className="navbar-item">
+                <Button onClick={() => {router.push("/users/bulkcreate")}}>
+                    Bulk Create
+                </Button>
                 <Button onClick={() => {router.push("/users/findusers")}}>
                     Find Users
                 </Button>

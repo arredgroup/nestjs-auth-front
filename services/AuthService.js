@@ -26,14 +26,37 @@ const findUsers = async ({ name, login_before_date, login_after_date, active }) 
                 antesSesion: login_before_date,
                 despuesSesion: login_after_date,
                 eliminados: active,
-            },
-        });
+            }
+        },
+        {
+            headers: {
+                token: localStorage.getItem('token')
+            }
+        }
+    );
         return response.data;
     } catch (e) {
         console.error(e);
         return [];
     }
 };
+
+const bulkCreateUsers = async (users) => {
+    try {
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', 
+            users,
+            {
+                headers: {
+                    token: localStorage.getItem('token')
+                }
+            }
+        );
+        console.log(response)
+        return response.data
+    } catch (e) {
+        return null;
+    }
+}
 
 const getUsers = async () => {
     try {
@@ -134,6 +157,7 @@ const updateUser = async (id, user, token) => {
 export default {
     handleLogin,
     findUsers,
+    bulkCreateUsers,
     getUsers,
     getUserById,
     logOut,

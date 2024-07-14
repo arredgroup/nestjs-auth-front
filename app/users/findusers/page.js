@@ -1,10 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, TextField, Button, Checkbox } from "@mui/material";
 import AuthService from "../../../services/AuthService";
 import Navbar from "../../../components/Navbar";
 
+import { useRouter } from "next/navigation";
+
 export default function FindUsersPage() {
+  const router = useRouter();
   const [filters, setFilters] = useState({
     name: "",
     login_before_date: "",
@@ -12,6 +15,13 @@ export default function FindUsersPage() {
     active: false,
   });
   const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      router.push("/login");
+    }
+  })
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
