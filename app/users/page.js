@@ -49,6 +49,9 @@ export default function Users(){
             <Navbar />
             <h1>Ejercicio 1</h1>
             <button onClick={() => router.push('/users/findUsers')}>Find Users</button>
+
+            <h1>Ejercicio 2</h1>
+            <button onClick={() => router.push('/users/bulkCreate')}>bulk Create</button>
             <h1>Users</h1>
             <Table>
                 <TableHead>

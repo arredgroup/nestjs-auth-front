@@ -1,12 +1,12 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Container, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-
+import { useRouter } from 'next/navigation';
 import Navbar from '../../components/Navbar'
 import AuthService from '../../services/AuthService';;
 
 export default function FindUsers() {
-
+    const router = useRouter();
     const [users, setUsers] = useState([]);
     const [nameFilter, setNameFilter] = useState('');
     const [loginBeforeDate, setLoginBeforeDate] = useState('');
@@ -38,6 +38,8 @@ export default function FindUsers() {
 
     return (
         <Container>
+            <h1>Regresar a Index</h1>
+            <button onClick={() => router.push('/users')}>Index</button>
             <Navbar />
             <h1>Find Users</h1>
             <div>

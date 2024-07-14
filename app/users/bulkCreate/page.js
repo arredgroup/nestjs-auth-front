@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Alert, AlertTitle } from '@mui/material';
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-
+import { useRouter } from 'next/navigation';
 import Navbar from '../../../components/Navbar'
 import AuthService from '../../../services/AuthService';
 
 export default function BulkCreate() {
+    const router = useRouter();
     const [users, setUsersData] = useState([]);
     const [successMessage, setSuccessMessage] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
@@ -37,6 +38,8 @@ export default function BulkCreate() {
 
     return (
         <Container>
+            <h1>Regresar a Index</h1>
+            <button onClick={() => router.push('/users')}>Index</button>
             <Navbar />
             <Typography variant="h4" gutterBottom>
                 Bulk Create
@@ -118,10 +121,10 @@ export default function BulkCreate() {
                 </TableBody>
             </Table>
             <Button variant="contained" color="primary" onClick={addRow}>
-                Añadir fila
+                Agregar Usuario
             </Button>
             <Button variant="contained" color="primary" onClick={handleSubmit}>
-                Crear Usuarios
+                Crear Usuarios en DB
             </Button>
         </Container>
     );
