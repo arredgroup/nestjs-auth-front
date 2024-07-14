@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,13 +30,15 @@ const SimpleSnackbar = (props) => {
     );
 
     return (
-        <Snackbar
-            open={openSnack}
-            autoHideDuration={6000}
-            onClose={handleClose}
-            message={message}
-            //action={action}
-        />
+        <div>
+            <Snackbar
+                open={openSnack}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                message={message}
+                //action={action}
+            />
+        </div>
     );
 }
 
