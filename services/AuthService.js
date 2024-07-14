@@ -18,6 +18,20 @@ const handleLogin = async (user, pass) => {
     }
 }
 
+const addUsers = async (users, token) => {
+    try{
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', users, {
+            headers: {
+                token,
+            }
+        });
+        return response.status === 200;
+    }
+    catch(e){
+        console.error(e);
+        return false;
+    }
+}
 const getUsers = async ({active, name, login_before_date, login_after_date}, token) => {
     try {
         const response = await axios.get('http://localhost:3001/api/v1/users/findUsers', {
@@ -108,4 +122,5 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    addUsers
 };

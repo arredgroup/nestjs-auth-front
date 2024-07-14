@@ -1,6 +1,6 @@
 "use client"
 import React, {useEffect, useState} from 'react';
-import {Container, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import {Button, Container, Grid, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import {Edit} from "@mui/icons-material";
 
@@ -57,7 +57,16 @@ export default function Users(){
             ):(
                 <>
                 <Navbar />
-                    <h1>Users</h1>
+                    <Grid container spacing={4} padding={10}>
+                        <Grid xs={2} padding={2}>
+                            <h1>Usuarios</h1>
+                        </Grid> 
+                        <Grid xs={3} padding={2}>
+                            <Link href="/users/create">
+                                <Button color='primary' variant='contained'>Añadir usuarios -&gt;</Button>
+                            </Link>
+                        </Grid>
+                    </Grid>
                     <Filters active={active} onChange={setActive} name={name} onNameChange={setName} loginAfterDate={login_after_date} loginBeforeDate={login_before_date} onLoginAfterDateChange={setLogin_after_date} onLoginBeforeDateChange={setLogin_before_date}/>
                     <Table>
                         <TableHead>
@@ -86,7 +95,8 @@ export default function Users(){
                                 ))
                             }
                         </TableBody>
-                    </Table></>
+                    </Table>
+                </>
             )}
         </Container>
     )
