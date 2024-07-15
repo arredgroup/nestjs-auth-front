@@ -114,6 +114,26 @@ const updateUser = async (id, user, token) => {
     }
 }
 
+const getFilteredUsers = async (query) => {
+    try {
+        const response = await axios.get(`http://localhost:3001/api/v1/users/findUsers?${query}`);
+        return response.data;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
+const bulkCreateUsers = async (data) => {
+    try {
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', data);
+        return response.data;
+    } catch (error) {
+        console.error('Error al crear usuarios masivamente:', error);
+        return { code: 500, message: 'Error al procesar la solicitud' };
+    }
+};
+
 export default {
     handleLogin,
     getUsers,
@@ -121,4 +141,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    getFilteredUsers,
+    bulkCreateUsers,
 };
