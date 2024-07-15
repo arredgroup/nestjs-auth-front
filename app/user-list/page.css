@@ -35,3 +35,8 @@
     justify-content: center;
     padding: 3rem;
 }
+
+.table-head * {
+    background-color: #eceff1;
+    font-weight: bold;
+}

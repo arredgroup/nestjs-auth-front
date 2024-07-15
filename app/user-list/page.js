@@ -1,25 +1,27 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Container, FormControl, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-import TextField from '@mui/material/TextField';
-import Button from "@mui/material/Button";
-import SimpleSnackbar from '../../components/SimpleSnackbar';
 import { useRouter } from 'next/navigation';
-
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Navbar from '@/components/Navbar';
-
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import { 
+    Card, 
+    Container, 
+    FormControl, 
+    Table, 
+    TableBody, 
+    TableCell, 
+    TableHead, 
+    TableRow,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+    Typography,
+    TextField,
+    Button } from "@mui/material";
 
+import Navbar from '@/components/Navbar';
 import AuthService from '../../services/AuthService';
 
 import './page.css';
@@ -152,7 +154,7 @@ export default function UserList() {
             <Card style={{marginBottom: '3rem'}}>
                 {users ? <Table>
                     <TableHead>
-                        <TableRow>
+                        <TableRow className='table-head'>
                             <TableCell>Nombre</TableCell>
                             <TableCell>Email</TableCell>
                             <TableCell>Estado</TableCell>
