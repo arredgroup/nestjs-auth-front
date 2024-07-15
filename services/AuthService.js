@@ -123,7 +123,19 @@ const getFilteredUsers = async (token, filterActivo, userFilter) => {
         return [];
     }
 }
-
+const registerBulk = async (token, users) => {
+    try{
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', users, {
+            headers: {
+                'token': token,
+            }
+        });
+        return response;
+    }catch (e) {
+        console.error(e);
+        return false;
+    }
+}
 export default {
     handleLogin,
     getUsers,
@@ -132,4 +144,5 @@ export default {
     registerUser,
     updateUser,
     getFilteredUsers,
+    registerBulk,
 };

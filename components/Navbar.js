@@ -26,6 +26,9 @@ const Navbar = () => {
     const handleUsers = async () => {
         router.push('/users');
     }
+    const handleBulk = async () => {
+        router.push('/users/bulkCreate');
+    }
 
     return (
         <div className="navbar">
@@ -43,7 +46,7 @@ const Navbar = () => {
                 </Button>
             </div>
             <div className="navbar-item">
-                <Button onClick={handleFindByFilter}>
+                <Button onClick={handleBulk}>
                     Bulk Create
                 </Button>
             </div>
