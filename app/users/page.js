@@ -1,9 +1,9 @@
 "use client";
+
 import React, { useEffect, useState } from 'react';
 import { Container, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import { Edit } from "@mui/icons-material";
-// import moment from 'moment';
 
 import AuthService from "../../services/AuthService";
 import { useRouter } from 'next/navigation';
@@ -21,17 +21,17 @@ export default function Users() {
             router.push('/login');
         }
         if (user?.roles?.includes('admin')) {
-            getAllUsers(filters);
+            getAllUsers();
         }
         if (user?.roles?.includes('user')) {
             getUser(user.id);
         }
-    }, [filters]);
+    }, [filters]); // <-- Run when filters change
 
-    const getAllUsers = async (filters) => {
+    const getAllUsers = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await AuthService.findUsers(filters, token);
+            const response = await AuthService.getUsers(filters, token);
             setUsers(response);
         } catch (error) {
             console.error('Error fetching users:', error);

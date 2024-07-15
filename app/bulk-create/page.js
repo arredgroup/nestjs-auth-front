@@ -43,7 +43,7 @@ export default function BulkCreateUsers() {
     const handleSubmit = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await AuthService.bulkCreateUsers({ users }, token);
+            const response = await AuthService.bulkCreate({ users }, token);
             console.log('Bulk create response:', response);
         } catch (error) {
             console.error('Error bulk creating users:', error);

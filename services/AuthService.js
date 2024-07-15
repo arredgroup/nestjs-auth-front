@@ -116,16 +116,22 @@ const updateUser = async (id, user, token) => {
 
 const findUsers = async (filters, token) => {
     try {
-        const params = new URLSearchParams(filters).toString();
-        const response = await axios.get(`http://localhost:3001/api/v1/users/findUsers?${params}`, {
-            headers: {
-                token,
-            }
-        });
+        const queryParams = new URLSearchParams(filters).toString();
+        const response = await axios.get(`http://localhost:3001/api/v1/users/findUsers?${queryParams}`, { headers: { token } });
         return response.data;
     } catch (error) {
         console.error(error);
-        return false;
+        return [];
+    }
+};
+
+const bulkCreate = async (users, token) => {
+    try {
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', { users }, { headers: { token } });
+        return response.data;
+    } catch (e) {
+        console.error(e);
+        return { successCount: 0, failureCount: users.length };
     }
 };
 
@@ -137,4 +143,5 @@ export default {
     registerUser,
     updateUser,
     findUsers,
+    bulkCreate
 };
