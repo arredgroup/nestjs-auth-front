@@ -13,8 +13,6 @@ const BulkUserCreate = (props) => {
     const {id} = props.params;
     const [user, setUser] = useState(null);
     const [users, setUsers] = useState([{ name: '', email: '' , password: '', cellphone: ''}]);
-    const [snackbarOpen, setSnackbarOpen] = useState(false); 
-    const [snackbarMessage, setSnackbarMessage] = useState(''); 
 
     useEffect(() => {
         //Comprobación de token expiración
@@ -42,7 +40,6 @@ const BulkUserCreate = (props) => {
             setUser(data);
         })();
     }, []);
-
     const handleUserChange = (e, index) => {
         const updatedUsers = [...users];
         updatedUsers[index][e.target.name] = e.target.value;
@@ -58,18 +55,9 @@ const BulkUserCreate = (props) => {
     const handleRegister = async () => {
         const token = localStorage.getItem('token');
         const response = await AuthService.registerBulkUsers(users, token);
-        setSnackbarMessage(response);
-        setSnackbarOpen(true);
         console.log(response);
-        router.push('/users');
-    }
-
-    const handleCloseSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
         }
-        setSnackbarOpen(false);
-    };
+
     return (
         <Container>
         <Navbar />
@@ -128,7 +116,6 @@ const BulkUserCreate = (props) => {
                          
                     </Stack>
             </Container>}    
-            <SimpleSnackbar open={snackbarOpen} message={snackbarMessage} onClose={handleCloseSnackbar} />
         </ Container>
     )
 }
