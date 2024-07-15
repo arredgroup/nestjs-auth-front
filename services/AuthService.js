@@ -51,6 +51,30 @@ const getUsers = async () => {
     }
 }
 
+
+
+const findUsers = async (query, token) => {
+    try {
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers', {
+            headers: {
+                token,
+            },
+            params: {
+                ...query,
+            },
+        });
+        return response.data;
+    } catch(e){
+        console.error(e);
+        return null;
+    }
+}
+
+
+
+
+
+
 const getUserById = async (id, token) => {
     try {
         const response = await axios.get('http://localhost:3001/api/v1/users/' + id, {
@@ -114,6 +138,24 @@ const updateUser = async (id, user, token) => {
     }
 }
 
+const bulkCreate = async (token, users) => {
+    try {
+        const response = await axios.post(
+            "http://localhost:3001/api/v1/users/bulkCreate",
+            users,
+            {
+                headers: {
+                    token,
+                },
+            }
+        );
+        return response.data;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+};
+
 export default {
     handleLogin,
     getUsers,
@@ -121,4 +163,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    findUsers,
+    bulkCreate
 };
