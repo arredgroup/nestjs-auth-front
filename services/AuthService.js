@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+//Se utilizo el backend desarrollado en el electivo de backend
 const handleLogin = async (user, pass) => {
     try{
         const response = await axios.post('http://localhost:3001/api/v1/auth/login', {
@@ -65,6 +65,21 @@ const getUserById = async (id, token) => {
     }
 }
 
+const getFindUsers = async (filters, token) => {
+    const query = new URLSearchParams(filters).toString();
+    try {
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers?' + query, {
+            headers: {
+                token,
+            }
+        });
+        return response.data;
+    } catch(e){
+        console.error(e);
+        return null;
+    }
+}
+
 const logOut = async (token) => {
     try {
         const response = await axios.post('http://localhost:3001/api/v1/auth/logout', {}, {
@@ -79,6 +94,24 @@ const logOut = async (token) => {
         localStorage.removeItem('user');
         return true;
     } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+const registerBulkUsers = async (users, token) => {
+    try{
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate',{
+            users,
+            headers:{
+                'token': token,
+            }
+            }
+        );
+        console.log(response);
+        return {success: response.status === 200,
+                message: response.data}
+    }catch (e) {
         console.error(e);
         return false;
     }
@@ -115,6 +148,8 @@ const updateUser = async (id, user, token) => {
 }
 
 export default {
+    registerBulkUsers,
+    getFindUsers,
     handleLogin,
     getUsers,
     getUserById,

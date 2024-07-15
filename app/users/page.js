@@ -1,8 +1,6 @@
 "use client"
 import React, {useEffect, useState} from 'react';
-import {Container, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
-import IconButton from '@mui/material/IconButton';
-import {Edit} from "@mui/icons-material";
+import {Container} from "@mui/material";
 
 import AuthService from "../../services/AuthService";
 import { useRouter } from 'next/navigation';
@@ -14,16 +12,25 @@ export default function Users(){
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
+        //Comprobación de token expiración
         const user = JSON.parse(localStorage.getItem('user'));
         if(!user){
+            console.log('No hay usuario');
             router.push('/login');
+        }else{
+        
+        const expirationTime = new Date(user.expiration);
+        const currentTime = new Date();
+        
+        if (currentTime >= expirationTime) {
+                console.log('El token ha expirado');
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                router.push('/login');
+                return;
         }
-        if(user?.roles?.includes('admin')){
-            getAllUsers();
-        }
-        if(user?.roles?.includes('user')){
-            getUser(user.id);
-        }
+        getUser(user.id);
+    }
     }, []);
 
     const getAllUsers = async () => {
@@ -37,42 +44,10 @@ export default function Users(){
         setUsers([data]);
     }
 
-    const handleEdit = (user) => {
-        router.push('/users/' + user.id + '/edit');
-    }
-
     return (
-        <Container>
+        <Container style={{justifyContent: 'center', alignItems: 'center'}}>
             <Navbar />
-            <h1>Users</h1>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Nombre</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Estado</TableCell>
-                        <TableCell>Última Sesión</TableCell>
-                        <TableCell>Acciones</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {
-                        users.map((user) => (
-                            <TableRow key={user}>
-                                <TableCell>{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.status? 'ACTIVO' : 'CERRADO'}</TableCell>
-                                <TableCell>TBD</TableCell>
-                                <TableCell>
-                                    <IconButton color="primary" aria-label={"Editar usuario " + user.name} onClick={() => handleEdit(user)}>
-                                        <Edit />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    }
-                </TableBody>
-            </Table>
+            <h1>Inicio</h1>
         </Container>
     )
 }

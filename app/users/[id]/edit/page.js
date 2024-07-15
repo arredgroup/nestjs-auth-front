@@ -1,81 +1,78 @@
 "use client"
 import React, {useEffect, useState} from 'react';
+import {Container, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import IconButton from '@mui/material/IconButton';
+import {Edit} from "@mui/icons-material";
 
 import AuthService from "@/services/AuthService";
-import {Container, Switch} from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { useRouter } from 'next/navigation';
+import Navbar from '/components/Navbar';
 
-const Edit = (props) => {
-    const {id} = props.params;
+export default function Users(){
 
-    const [user, setUser] = useState(null);
-
-    const [editedUser, setEditedUser] = useState({
-        name: '',
-        email: '',
-        cellphone: '',
-        status: true
-    });
-
-    const handleChange = (value, field) => {
-        setEditedUser({
-            ...editedUser,
-            [field]: value
-        });
-    }
-
-    const handleUpdate = () => {
-        const token = localStorage.getItem('token');
-        (async () => {
-            const data = await AuthService.updateUser(id, editedUser, token);
-            console.log(data);
-        })();
-    }
+    const router = useRouter();
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        (async () => {
-            const data = await AuthService.getUserById(id, token);
-            setUser(data);
-            setEditedUser(data);
-        })();
+        const user = JSON.parse(localStorage.getItem('user'));
+        if(!user){
+            router.push('/login');
+        }
+        if(user?.roles?.includes('admin')){
+            getAllUsers();
+        }
+        if(user?.roles?.includes('user')){
+            getUser(user.id);
+        }
     }, []);
 
+    const getAllUsers = async () => {
+        const data = await AuthService.getUsers();
+        setUsers(data);
+    }
+
+    const getUser = async (id) => {
+        const token = localStorage.getItem('token');
+        const data = await AuthService.getUserById(id, token);
+        setUsers([data]);
+    }
+
+    const handleEdit = (user) => {
+        router.push('/users/' + user.id + '/edit/editor');
+    }
+
     return (
-        <div>
-            <h1>Edit user {id}</h1>
-            { !user ? "No hay datos" : <Container>
-                <TextField
-                    label="Nombre"
-                    name="name"
-                    variant="outlined"
-                    value={editedUser.name}
-                    onChange={(e) => handleChange(e.target.value, 'name')}
-                />
-                <TextField
-                    label="Email"
-                    name="email"
-                    variant="outlined"
-                    value={editedUser.email} onChange={(e) => handleChange(e.target.value, 'email')}
-                />
-                <TextField
-                    label="Celular"
-                    name="cellphone"
-                    variant="outlined"
-                    value={editedUser.cellphone}
-                    onChange={(e) => handleChange(e.target.value, 'cellphone')}
-                />
-                <Switch
-                    name="status"
-                    checked={editedUser.status}
-                    value={editedUser.status}
-                    onChange={(e) => handleChange(e.target.checked, 'status')}
-                />
-                <Button type="outline" onClick={handleUpdate}>Actualizar</Button>
-            </Container>}
-        </div>
+        <Container>
+            <Navbar />
+            <h1>Editor de usuario</h1>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Nombre</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Estado</TableCell>
+                        <TableCell>Última Sesión</TableCell>
+                        <TableCell>Acciones</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {
+                        users.map((user) => (
+                            <TableRow key={user}>
+                                <TableCell>{user.name}</TableCell>
+                                <TableCell>{user.email}</TableCell>
+                                <TableCell>{user.status? 'ACTIVO' : 'CERRADO'}</TableCell>
+                                <TableCell>TBD</TableCell>
+                                <TableCell>
+                                    <IconButton color="primary" aria-label={"Editar usuario " + user.name} onClick={() => handleEdit(user)}>
+                                        <Edit />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    }
+                </TableBody>
+            </Table>
+        </Container>
     )
 }
-
-export default Edit;
