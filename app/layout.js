@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "./globals.css"; // Ruta correcta para importar globals.css desde la misma carpeta
+import '../mocks/axiosMocks'; // Importa los mocks
 
 const inter = Inter({ subsets: ["latin"] });
 
