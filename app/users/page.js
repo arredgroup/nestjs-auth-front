@@ -7,6 +7,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Button,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { Edit } from "@mui/icons-material";
@@ -54,13 +55,20 @@ export default function Users() {
         <Container>
             <Navbar />
             <h1>Users</h1>
-            <Link href="/users/find" >
+            <Button
+                onClick={() => {
+                    router.push("/users/find");
+                }}
+            >
                 Filtrar usuarios
-            </Link>
-            <br />
-            <Link href="/users/bulk-create" color="primary">
+            </Button>
+            <Button
+                onClick={() => {
+                    router.push("/users/bulk-create");
+                }}
+            >
                 Crear usuarios
-            </Link>
+            </Button>
             <Table>
                 <TableHead>
                     <TableRow>

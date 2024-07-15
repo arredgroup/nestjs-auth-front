@@ -15,7 +15,15 @@ export default function BulkCreateUsers() {
     const [openSnack, setOpenSnack] = useState(false);
 
     useEffect(() => {
-        setUsers(Array.from({ length: number }, () => ({})));
+        setUsers(
+            Array.from({ length: number }, () => ({
+                name: "",
+                email: "",
+                password: "",
+                password_second: "",
+                cellphone: "",
+            }))
+        );
     }, [number]);
 
     const handleChange = (e, index) => {
@@ -28,6 +36,14 @@ export default function BulkCreateUsers() {
         );
     };
 
+    const isEmptyUsers = (users) => {
+        return users.some((user) => {
+            return Object.values(user).some(
+                (value) => value === "" || value === null || value === undefined
+            );
+        });
+    };
+
     const createUsers = async () => {
         const token = localStorage.getItem("token");
         const response = await AuthService.bulkCreateUsers(token, users);
@@ -37,6 +53,12 @@ export default function BulkCreateUsers() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(users);
+        if (isEmptyUsers(users)) {
+            setMessage("You must fill all fields");
+            setOpenSnack(true);
+            return;
+        }
         createUsers();
     };
 
@@ -50,7 +72,7 @@ export default function BulkCreateUsers() {
                 }}
             />
             <Navbar />
-            <h1>Crear usuarios</h1>
+            <h1>Create users</h1>
             <input
                 type="number"
                 value={number}
@@ -62,7 +84,7 @@ export default function BulkCreateUsers() {
                         className="form-input"
                         label="Nombre"
                         name="name"
-                        value={user?.name || ""}
+                        value={user?.name}
                         placeholder="juan"
                         size="small"
                         InputLabelProps={{ shrink: true }}
@@ -73,7 +95,7 @@ export default function BulkCreateUsers() {
                         className="form-input"
                         label="Email"
                         name="email"
-                        value={user?.email || ""}
+                        value={user?.email}
                         placeholder="juan@gmail.com"
                         size="small"
                         InputLabelProps={{ shrink: true }}
@@ -84,7 +106,7 @@ export default function BulkCreateUsers() {
                         className="form-input"
                         type="password"
                         name="password"
-                        value={user?.password || ""}
+                        value={user?.password}
                         label="Contraseña"
                         placeholder="******"
                         size="small"
@@ -96,7 +118,7 @@ export default function BulkCreateUsers() {
                         className="form-input"
                         type="password"
                         name="password_second"
-                        value={user?.password_second || ""}
+                        value={user?.password_second}
                         label="Confirmar contraseña"
                         placeholder="******"
                         size="small"
@@ -108,7 +130,7 @@ export default function BulkCreateUsers() {
                         className="form-input"
                         label="Celular"
                         name="cellphone"
-                        value={user?.cellphone || ""}
+                        value={user?.cellphone}
                         placeholder="123456789"
                         size="small"
                         InputLabelProps={{ shrink: true }}
