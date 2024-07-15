@@ -1,12 +1,24 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, TextField, Button, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import AuthService from '@/services/AuthService';
 import Navbar from '@/components/Navbar';
+import { useRouter } from "next/navigation";
 
 export default function BulkCreateUsers() {
+    const router = useRouter();
     const [users, setUsers] = useState([{ name: '', email: '', password: '', password_second: '', cellphone: '' }]);
     const [errors, setErrors] = useState([]);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            router.push("/login");
+        } else if (!user?.roles?.includes("admin")) {
+            alert("No tienes permiso para acceder a esta página.");
+            router.push("/");
+        }
+    }, [router]);
 
     const handleInputChange = (index, event) => {
         const values = [...users];
@@ -148,6 +160,7 @@ export default function BulkCreateUsers() {
                     variant="contained"
                     color="primary"
                     onClick={handleAddUser}
+                    style={{ marginRight: '10px' }}
                 >
                     Añadir Usuario
                 </Button >

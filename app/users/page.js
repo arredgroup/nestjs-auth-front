@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { Container, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Container, Table, TableBody, TableCell, TableHead, TableRow, Button } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import { Edit } from "@mui/icons-material";
 import AuthService from "../../services/AuthService";
@@ -54,13 +54,12 @@ export default function Users() {
         <Container>
             <Navbar />
             <h1>Usuarios</h1>
-            <Link href="/users/FindUsers" >
+            <Button variant="contained" color="primary" component={Link} href="/users/FindUsers" style={{ marginRight: '10px' }}>
                 Filtrar usuarios
-            </Link>
-            <br />
-            <Link href="/users/BulkUsers" color="primary">
+            </Button>
+            <Button variant="contained" color="secondary" component={Link} href="/users/BulkUsers">
                 Crear usuarios
-            </Link>
+            </Button>
             <Table>
                 <TableHead>
                     <TableRow>
