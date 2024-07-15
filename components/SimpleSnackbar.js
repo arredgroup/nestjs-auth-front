@@ -1,3 +1,4 @@
+"use client"
 import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
@@ -7,6 +8,7 @@ const SimpleSnackbar = (props)  => {
     const { message, openSnack, closeSnack } = props;
 
     const handleClose = (event, reason) => {
+        event.preventDefault();
         if (reason === 'clickaway') {
             return;
         }
