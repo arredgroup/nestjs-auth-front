@@ -1,17 +1,20 @@
 "use client"
 import React, {useEffect, useState} from 'react';
-import {Container, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import {Container, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import {Edit} from "@mui/icons-material";
+//import moment from 'moment';
 
 import AuthService from "../../services/AuthService";
 import { useRouter } from 'next/navigation';
 import Navbar from '../../components/Navbar';
+import SearchFilters from '@/components/SearchFilters';
 
 export default function Users(){
 
     const router = useRouter();
     const [users, setUsers] = useState([]);
+    const [filters, setFilters] = useState({});
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -27,8 +30,13 @@ export default function Users(){
     }, []);
 
     const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
-        setUsers(data);
+        const token = localStorage.getItem('token');
+        try {
+            const response = await AuthService.getUsers(filters, token);
+            setUsers(response);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
     }
 
     const getUser = async (id) => {
@@ -41,10 +49,17 @@ export default function Users(){
         router.push('/users/' + user.id + '/edit');
     }
 
+    const handleApplyFilters = (newFilters) => {
+        setFilters(newFilters);
+    }
+
+
+
     return (
         <Container>
             <Navbar />
             <h1>Users</h1>
+            <SearchFilters onApplyFilters={handleApplyFilters} />
             <Table>
                 <TableHead>
                     <TableRow>
