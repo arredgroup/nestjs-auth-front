@@ -19,8 +19,10 @@ const handleLogin = async (user, pass) => {
 }
 
 const getFindUser = async (req, token) => {
+    const query = new URLSearchParams(req).toString();
+    console.log(query);
     try {
-        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers' + req, {
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers?' + query, {
             headers: {
                 token,
             }
@@ -35,7 +37,8 @@ const getFindUser = async (req, token) => {
 
 const postBulkCreate = async (users, token) => {
     try {
-        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', users, {
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', {
+            users, 
             headers: {
                 token,
             }
