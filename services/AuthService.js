@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { formatDate } from '../utils/dateUtils';
 
 const handleLogin = async (user, pass) => {
     try{
@@ -114,6 +115,57 @@ const updateUser = async (id, user, token) => {
     }
 }
 
+const getAllUsers = async (token) => {
+    // No tengo un endpoint para sacar todos los usuarios, 
+    // asi que utilizo el endpoint findUsers sacando los activos
+    // e inactivos para tener a todos los usuarios.
+    try {
+        const response_active = await axios.get('http://localhost:3001/api/v1/users/findUsers?active=true', {
+            headers: {
+                token,
+            }
+        });
+
+        const response_inactive = await axios.get('http://localhost:3001/api/v1/users/findUsers?active=false', {
+            headers: {
+                token,
+            }
+        });
+        return [...response_active.data, ...response_inactive.data];
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+const getFilterUsers = async (token, name, active, afterDate, beforeDate) => {
+    const loginAfterDate = afterDate && formatDate(afterDate);
+    const loginBeforeDate = beforeDate && formatDate(beforeDate);
+
+    let url = 'http://localhost:3001/api/v1/users/findUsers?';
+    url += name ? `name=${name}&`: '';
+    url += typeof active === 'boolean' ? `active=${active}&`: '';
+    url += loginAfterDate ? `login_after_date=${loginAfterDate}&`: '';
+    url += loginBeforeDate ? `login_before_date=${loginBeforeDate}&`: '';
+
+    console.log(url);
+    console.log(token);
+
+    try {
+        const response = await axios.get(url, {
+            headers: {
+                token,
+            },
+        });
+        
+        return response.data;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+};
+
+
 export default {
     handleLogin,
     getUsers,
@@ -121,4 +173,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    getAllUsers,
+    getFilterUsers,
 };
