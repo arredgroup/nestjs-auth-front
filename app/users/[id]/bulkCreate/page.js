@@ -62,11 +62,9 @@ const BulkUserCreate = (props) => {
         const token = localStorage.getItem('token');
         try {
             const response = await AuthService.registerBulkUsers(users, token);
-            console.log(response.message); 
             setSnackbarMessage(response.message);
             setSnackbarOpen(true);
         } catch (error) {
-            console.error(error);
             setSnackbarMessage('Ocurrió un error al crear los usuarios');
             setSnackbarOpen(true);
         }

@@ -50,9 +50,7 @@ const Search = (props) => {
 
     const handleSumbit = () => {
         const filter = {};
-        console.log(status);
         if(status !== null){
-            console.log(status);
             filter.status = status;
         }
         if(name){
@@ -67,7 +65,6 @@ const Search = (props) => {
         const token = localStorage.getItem('token');
         (async () => {
             const data = await AuthService.getFindUsers(filter, token);
-            console.log(data);
             setUsers(data);
         })()    ;
         
