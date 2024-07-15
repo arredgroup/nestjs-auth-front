@@ -9,8 +9,8 @@ const handleLogin = async (user, pass) => {
         //response.data contains a token in BASE64 format
 
         const decoded = atob(response.data);
-        localStorage.setItem('token', response.data);
-        localStorage.setItem('user', decoded);
+        localStorage.setItem("token", response.data);
+        localStorage.setItem("user", decoded);
         return true;
     } catch (e) {
         console.error(e);
@@ -18,32 +18,13 @@ const handleLogin = async (user, pass) => {
     }
 }
 
-const getUsers = async () => {
+const getUsers = async (token) => {
     try {
-        //const response = await axios.get('fakeapi');
-        const response = {
-            data: [
-                {
-                    id: 1,
-                    name: 'muhammad fake',
-                    email: 'a@b.cl',
-                    status: true
-                },
-
-                {
-                    id: 2,
-                    name: 'muhammed fake',
-                    email: 'b@b.cl',
-                    status: true
-                },
-                {
-                    id: 3,
-                    name: 'muhammid fake',
-                    email: 'c@b.cl',
-                    status: true
-                },
-            ]
-        }
+        const response = await axios.get('http://localhost:3001/api/v1/users/getAllUsers', {
+            headers: {
+                token,
+            }
+        });
         return response.data;
     } catch (e) {
         console.error(e);
@@ -53,30 +34,61 @@ const getUsers = async () => {
 
 const getUserById = async (id, token) => {
     try {
-        const response = await axios.get('http://localhost:3001/api/v1/users/' + id, {
+        const response = await axios.get("http://localhost:3001/api/v1/users/" + id , {
             headers: {
                 token,
             }
         });
         return response.data;
-    } catch(e){
+    } catch (e) {
         console.error(e);
         return null;
     }
 }
 
+const bulkCreateUsers = async (users, token) => {
+    try{
+    const response = await axios.post("http://localhost:3001/api/v1/users/bulkCreateUsers", users, {
+        headers: {
+            token,
+        }
+    });
+    return response.data;
+    } catch(e){
+        console.error(e);
+        return false;
+}
+}
+
+const findUsers = async (filters, token) => {
+    try {
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers', {
+            headers: {
+                token,
+            },
+            params: {
+                ...filters,
+            },
+        });
+        return response.data;
+    } catch (e) {
+        console.error("Error in AuthService.findUsers:", e);
+        return [];
+    }
+}
+
 const logOut = async (token) => {
     try {
-        const response = await axios.post('http://localhost:3001/api/v1/auth/logout', {}, {
+        const response = await axios.post("http://localhost:3001/api/v1/auth/logout", {}, {
             headers: {
-                'token': token,
+                 token: token,
             }
         });
         if(response.status !== 200){
             return false;
         }
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         return true;
     } catch (e) {
         console.error(e);
@@ -86,7 +98,7 @@ const logOut = async (token) => {
 
 const registerUser = async (name, email, password, password_second, cellphone) => {
     try{
-        const response = await axios.post('http://localhost:3001/api/v1/auth/register', {
+        const response = await axios.post("http://localhost:3001/api/v1/auth/register", {
             name,
             email,
             password,
@@ -102,7 +114,7 @@ const registerUser = async (name, email, password, password_second, cellphone) =
 
 const updateUser = async (id, user, token) => {
     try {
-        const response = await axios.put('http://localhost:3001/api/v1/users/' + id, user, {
+        const response = await axios.put("http://localhost:3001/api/v1/users/" + id, user, {
             headers: {
                 token,
             }
@@ -121,4 +133,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    findUsers,
+    bulkCreateUsers,
 };
