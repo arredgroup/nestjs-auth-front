@@ -1,0 +1,23 @@
+.navbar {
+    display: flex;
+    background-color: #333;
+    padding: 10px;
+}
+
+.navbar-item {
+    margin-right: 20px;
+    color: white;
+}
+
+.navbar-item a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-item a:hover {
+    color: #ddd;
+}
+
+.navbar-item button {
+    color: white;
+}

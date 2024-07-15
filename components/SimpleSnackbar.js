@@ -34,7 +34,7 @@ const SimpleSnackbar = (props)  => {
                 autoHideDuration={6000}
                 onClose={handleClose}
                 message={message}
-                action={action}
+                //action={action}
             />
         </div>
     );
