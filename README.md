@@ -1,7 +1,7 @@
 Se puede hacer pruebas en modo incognito en el navegador para que no afecte el cache
 
 Se hace las pruebas desde el puerto http://localhost:3000/
-paara las consultas que se realizaran al backend 
+para las consultas que se realizaran al backend 
 
 Vistas:
 
