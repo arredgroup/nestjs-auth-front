@@ -66,6 +66,7 @@ export default function findUsers(){
                 <TextField
                     label="Login before"
                     name="login_before"
+                    type='date'
                     variant="outlined"
                     onChange={(e) => setLogin_before(e.target.value)}
                     placeholder="Date"
@@ -73,6 +74,7 @@ export default function findUsers(){
                 <TextField
                     label="Login after"
                     name="login_after"
+                    type='date'
                     variant="outlined"
                     onChange={(e) => setLogin_after(e.target.value)}
                     placeholder="Date"
