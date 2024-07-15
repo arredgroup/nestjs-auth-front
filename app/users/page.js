@@ -1,33 +1,39 @@
 "use client"
-import React, {useEffect, useState} from 'react';
-import {Container, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { Container, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
-import {Edit} from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
+import { styled } from '@mui/material/styles';
 
 import AuthService from "../../services/AuthService";
 import { useRouter } from 'next/navigation';
 import Navbar from '../../components/Navbar';
 
-export default function Users(){
+const StyledTable = styled(Table)({
+    backgroundColor: 'white',
+});
 
+const StyledTableCell = styled(TableCell)({
+    backgroundColor: 'white',
+});
+
+export default function Users() {
     const router = useRouter();
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
-        if(!user){
+        if (!user) {
             router.push('/login');
         }
-        if(user?.roles?.includes('admin')){
+        if (user?.roles?.includes('user')) {
             getAllUsers();
-        }
-        if(user?.roles?.includes('user')){
-            getUser(user.id);
         }
     }, []);
 
     const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
+        const token = localStorage.getItem('token');
+        const data = await AuthService.getFindUser('', token);
         setUsers(data);
     }
 
@@ -45,34 +51,34 @@ export default function Users(){
         <Container>
             <Navbar />
             <h1>Users</h1>
-            <Table>
+            <StyledTable>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Nombre</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Estado</TableCell>
-                        <TableCell>Última Sesión</TableCell>
-                        <TableCell>Acciones</TableCell>
+                        <StyledTableCell>Nombre</StyledTableCell>
+                        <StyledTableCell>Email</StyledTableCell>
+                        <StyledTableCell>Estado</StyledTableCell>
+                        <StyledTableCell>Última Sesión</StyledTableCell>
+                        <StyledTableCell>Acciones</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {
                         users.map((user) => (
-                            <TableRow key={user}>
-                                <TableCell>{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.status? 'ACTIVO' : 'CERRADO'}</TableCell>
-                                <TableCell>TBD</TableCell>
-                                <TableCell>
+                            <TableRow key={user.id}>
+                                <StyledTableCell>{user.name}</StyledTableCell>
+                                <StyledTableCell>{user.email}</StyledTableCell>
+                                <StyledTableCell>{user.status ? 'ACTIVO' : 'CERRADO'}</StyledTableCell>
+                                <StyledTableCell>TBD</StyledTableCell>
+                                <StyledTableCell>
                                     <IconButton color="primary" aria-label={"Editar usuario " + user.name} onClick={() => handleEdit(user)}>
                                         <Edit />
                                     </IconButton>
-                                </TableCell>
+                                </StyledTableCell>
                             </TableRow>
                         ))
                     }
                 </TableBody>
-            </Table>
+            </StyledTable>
         </Container>
     )
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const handleLogin = async (user, pass) => {
-    try{
+    try {
         const response = await axios.post('http://localhost:3001/api/v1/auth/login', {
             email: user,
             password: pass,
@@ -17,6 +17,41 @@ const handleLogin = async (user, pass) => {
         return false;
     }
 }
+
+const getFindUser = async (req, token) => {
+    const query = new URLSearchParams(req).toString();
+    console.log(query);
+    try {
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers?' + query, {
+            headers: {
+                token,
+            }
+        });
+        console.log(response.data);
+        return response.data;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
+const bulkCreateUsers = async (token, users) => {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+            "http://localhost:3001/api/v1/users/bulkCreate",            
+            {
+                headers: {
+                    token,
+                },
+            }
+        );
+        return response.data;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+};
 
 const getUsers = async () => {
     try {
@@ -59,7 +94,7 @@ const getUserById = async (id, token) => {
             }
         });
         return response.data;
-    } catch(e){
+    } catch (e) {
         console.error(e);
         return null;
     }
@@ -72,7 +107,7 @@ const logOut = async (token) => {
                 'token': token,
             }
         });
-        if(response.status !== 200){
+        if (response.status !== 200) {
             return false;
         }
         localStorage.removeItem('token');
@@ -85,7 +120,7 @@ const logOut = async (token) => {
 }
 
 const registerUser = async (name, email, password, password_second, cellphone) => {
-    try{
+    try {
         const response = await axios.post('http://localhost:3001/api/v1/auth/register', {
             name,
             email,
@@ -94,7 +129,7 @@ const registerUser = async (name, email, password, password_second, cellphone) =
             cellphone,
         });
         return (response.status === 200);
-    }catch (e) {
+    } catch (e) {
         console.error(e);
         return false;
     }
@@ -121,4 +156,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    getFindUser,
+    bulkCreateUsers
 };
