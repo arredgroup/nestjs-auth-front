@@ -65,6 +65,22 @@ const getUserById = async (id, token) => {
     }
 }
 
+const getfindUsers = async (query, token) => {
+    const queryparams = new URLSearchParams(query).toString();
+    try {
+        console.log("nquery",query);
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers?' + queryparams, {
+            headers: {
+                token,
+            }
+        });
+        return response.data;
+    } catch(e){
+        console.error(e);
+        return null;
+    }
+}
+
 const logOut = async (token) => {
     try {
         const response = await axios.post('http://localhost:3001/api/v1/auth/logout', {}, {
@@ -121,4 +137,5 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    getfindUsers,
 };
