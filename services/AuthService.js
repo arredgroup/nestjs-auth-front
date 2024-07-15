@@ -108,7 +108,9 @@ const registerBulkUsers = async (users, token) => {
             }
             }
         );
-        return (response.status === 200);
+        console.log(response);
+        return {success: response.status === 200,
+                message: response.data}
     }catch (e) {
         console.error(e);
         return false;

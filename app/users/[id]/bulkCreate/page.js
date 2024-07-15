@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import AuthService from "@/services/AuthService";
 import {Container, Stack, TextField, Button, IconButton, Typography} from "@mui/material";
+import Snackbar from '@mui/material/Snackbar';
 import { Delete } from "@mui/icons-material";
 
 const BulkUserCreate = (props) => {
@@ -13,7 +14,9 @@ const BulkUserCreate = (props) => {
     const {id} = props.params;
     const [user, setUser] = useState(null);
     const [users, setUsers] = useState([{ name: '', email: '' , password: '', cellphone: ''}]);
-
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    
     useEffect(() => {
         //Comprobación de token expiración
         const user = JSON.parse(localStorage.getItem('user'));
@@ -21,12 +24,12 @@ const BulkUserCreate = (props) => {
             console.log('No hay usuario');
             router.push('/login');
         }else{
-        
+    
         const expirationTime = new Date(user.expiration);
         const currentTime = new Date();
-        
+    
         if (currentTime >= expirationTime) {
-
+    
                 console.log('El token ha expirado');
                 localStorage.removeItem('user');
                 localStorage.removeItem('token');
@@ -40,23 +43,41 @@ const BulkUserCreate = (props) => {
             setUser(data);
         })();
     }, []);
+
     const handleUserChange = (e, index) => {
         const updatedUsers = [...users];
         updatedUsers[index][e.target.name] = e.target.value;
         setUsers(updatedUsers);
       };
+
       const handleAddUser = () => {
         setUsers([...users, {  name: '', email: '' , password: '', cellphone: ''}]);
       };
+
       const handleRemoveUser = (indexRemove) => {
         setUsers((currentUsers) => currentUsers.filter((_, index) => index !== indexRemove));
       };
 
     const handleRegister = async () => {
         const token = localStorage.getItem('token');
-        const response = await AuthService.registerBulkUsers(users, token);
-        console.log(response);
+        try {
+            const response = await AuthService.registerBulkUsers(users, token);
+            console.log(response.message); 
+            setSnackbarMessage(response.message);
+            setSnackbarOpen(true);
+        } catch (error) {
+            console.error(error);
+            setSnackbarMessage('Ocurrió un error al crear los usuarios');
+            setSnackbarOpen(true);
         }
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setSnackbarOpen(false);
+      };
 
     return (
         <Container>
@@ -112,6 +133,12 @@ const BulkUserCreate = (props) => {
                     <Stack direction={'row'} spacing={3}>
                         <Button variant="contained"  disabled={users.some(user => !user.name.trim() || !user.email.trim() || !user.password.trim() || !user.cellphone.trim())} onClick={handleRegister}>Crear</Button>
                         <Button variant="contained" onClick={handleAddUser}>Añadir</Button>
+                        <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={snackbarMessage}
+      />
                          </Stack>
                          
                     </Stack>
