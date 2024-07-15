@@ -108,12 +108,15 @@ const Search = (props) => {
                             onChange={(newValue) => setLoginBeforeDate(newValue)}
                          />
                          </LocalizationProvider>
-                         <Switch
-                            name="status"
-                            checked={status}
-                            value={status}
-                            onChange={(e) => setStatus(e.target.checked)}
-                            />
+                            <Stack>
+                            <Typography variant="body1">Estado</Typography>
+                            <Switch 
+                                name="status"
+                                checked={status}
+                                value={status}
+                                onChange={(e) => setStatus(e.target.checked)}
+                                />
+                            </Stack>
                          <Button variant="contained" onClick={handleSumbit}>Filtrar</Button>
                          <Button variant="contained" onClick={handleClearFilters}>Limpiar Filtros</Button>
                          </Stack>
