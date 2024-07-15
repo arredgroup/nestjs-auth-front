@@ -37,6 +37,7 @@ export default function FindUsers() {
     const getFilteredUsers = async () => {
         const token = localStorage.getItem("token");
         const data = await AuthService.findUsers(token, query);
+        console.log(data);
         setUsers(data);
     };
 
@@ -121,7 +122,11 @@ export default function FindUsers() {
                             <TableCell>
                                 {user.status ? "ACTIVO" : "CERRADO"}
                             </TableCell>
-                            <TableCell>TBD</TableCell>
+                            <TableCell>
+                                {user.Sessions?.length > 0
+                                    ? user.Sessions[0]?.createdAt
+                                    : "SIN SESIÓN"}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
