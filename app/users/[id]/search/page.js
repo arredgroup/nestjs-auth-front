@@ -100,15 +100,15 @@ const Search = (props) => {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker 
                             label="Logeado despues"
-                            value={loginBeforeDate}
-                            format="DD-MM-YYYY"
-                            onChange={(newValue) => setLoginBeforeDate(newValue)}
-                         />
-                           <DatePicker 
-                            label="Logeado antes"
                             value={loginAfterDate}
                             format="DD-MM-YYYY"
                             onChange={(newValue) => setLoginAfterDate(newValue)}
+                         />
+                           <DatePicker 
+                            label="Logeado antes"
+                            value={loginBeforeDate}
+                            format="DD-MM-YYYY"
+                            onChange={(newValue) => setLoginBeforeDate(newValue)}
                          />
                          </LocalizationProvider>
                          <Switch
@@ -130,7 +130,6 @@ const Search = (props) => {
                         <TableCell>Email</TableCell>
                         <TableCell>Estado</TableCell>
                         <TableCell>Última Sesión</TableCell>
-                        <TableCell>Acciones</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -142,7 +141,6 @@ const Search = (props) => {
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.status ? 'ACTIVO' : 'CERRADO'}</TableCell>
                                     <TableCell>{dayjs(user.Sessions[0].expiration).format('DD-MM-YYYY HH:mm:ss')}</TableCell>
-                                    <TableCell>Logiado</TableCell>
                                 </TableRow>
                             ) : null // No renderiza nada si no hay sesiones
                         ))
