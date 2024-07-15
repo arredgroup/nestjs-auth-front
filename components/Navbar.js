@@ -26,6 +26,16 @@ const Navbar = () => {
                 {user?.name}
             </div>
             <div className="navbar-item">
+                <Button variant='contained' onClick={() => router.push('/users/bulk')}>
+                    BulkCreate
+                </Button>
+            </div>
+            <div className="navbar-item">
+                <Button variant='contained' onClick={() => router.push('/users/find')}>
+                    FindUsers
+                </Button>
+            </div>
+            <div className="navbar-item">
                 <Button onClick={handleLogout}>
                     Logout
                 </Button>
