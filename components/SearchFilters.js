@@ -62,7 +62,6 @@ const SearchFilters = ({ onApplyFilters }) =>{
                 Aplicar Filtros
             </Button>
         </Box>
-
     );
 }
 
