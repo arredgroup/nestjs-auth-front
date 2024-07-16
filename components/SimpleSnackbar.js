@@ -8,7 +8,7 @@ const SimpleSnackbar = (props)  => {
     const { message, openSnack, closeSnack } = props;
 
     const handleClose = (event, reason) => {
-        event.preventDefault();
+        //event.preventDefault();
         if (reason === 'clickaway') {
             return;
         }
