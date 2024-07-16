@@ -1,17 +1,15 @@
-import axios from 'axios';
-
 const handleLogin = async (user, pass) => {
-    try{
-        const response = await axios.post('http://localhost:3001/api/v1/auth/login', {
-            email: user,
-            password: pass,
-        });
-        //response.data contains a token in BASE64 format
-
-        const decoded = atob(response.data);
-        localStorage.setItem('token', response.data);
-        localStorage.setItem('user', decoded);
-        return true;
+    try {
+        const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+        const foundUser = storedUsers.find(u => u.email === user && u.password === pass);
+        
+        if (foundUser) {
+            localStorage.setItem('token', 'tokenfantasma');
+            localStorage.setItem('user', JSON.stringify(foundUser));
+            return true;
+        } else {
+            return false;
+        }
     } catch (e) {
         console.error(e);
         return false;
@@ -20,61 +18,27 @@ const handleLogin = async (user, pass) => {
 
 const getUsers = async () => {
     try {
-        //const response = await axios.get('fakeapi');
-        const response = {
-            data: [
-                {
-                    id: 1,
-                    name: 'muhammad fake',
-                    email: 'a@b.cl',
-                    status: true
-                },
-
-                {
-                    id: 2,
-                    name: 'muhammed fake',
-                    email: 'b@b.cl',
-                    status: true
-                },
-                {
-                    id: 3,
-                    name: 'muhammid fake',
-                    email: 'c@b.cl',
-                    status: true
-                },
-            ]
-        }
-        return response.data;
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        return users;
     } catch (e) {
         console.error(e);
         return [];
     }
 }
 
-const getUserById = async (id, token) => {
+const getUserById = async (id) => {
     try {
-        const response = await axios.get('http://localhost:3001/api/v1/users/' + id, {
-            headers: {
-                token,
-            }
-        });
-        return response.data;
-    } catch(e){
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const user = users.find(u => u.id === id);
+        return user || null;
+    } catch (e) {
         console.error(e);
         return null;
     }
 }
 
-const logOut = async (token) => {
+const logOut = async () => {
     try {
-        const response = await axios.post('http://localhost:3001/api/v1/auth/logout', {}, {
-            headers: {
-                'token': token,
-            }
-        });
-        if(response.status !== 200){
-            return false;
-        }
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         return true;
@@ -85,29 +49,61 @@ const logOut = async (token) => {
 }
 
 const registerUser = async (name, email, password, password_second, cellphone) => {
-    try{
-        const response = await axios.post('http://localhost:3001/api/v1/auth/register', {
+    try {
+        if (password !== password_second) {
+            throw new Error('Passwords do not match');
+        }
+
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const newUser = {
+            id: users.length + 1,
             name,
             email,
             password,
-            password_second,
             cellphone,
-        });
-        return (response.status === 200);
-    }catch (e) {
+        };
+
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        return true;
+    } catch (e) {
         console.error(e);
         return false;
     }
 }
 
-const updateUser = async (id, user, token) => {
+const updateUser = async (id, updatedUser) => {
     try {
-        const response = await axios.put('http://localhost:3001/api/v1/users/' + id, user, {
-            headers: {
-                token,
-            }
-        });
-        return (response.status === 200);
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const userIndex = users.findIndex(u => u.id === id);
+
+        if (userIndex === -1) {
+            return false;
+        }
+
+        users[userIndex] = { ...users[userIndex], ...updatedUser };
+        localStorage.setItem('users', JSON.stringify(users));
+        return true;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+const bulkCreateUsers = async (users) => {
+    try {
+        const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+        const newUsers = users.map((user, index) => ({
+            id: existingUsers.length + index + 1,
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            cellphone: user.cellphone,
+        }));
+
+        const allUsers = [...existingUsers, ...newUsers];
+        localStorage.setItem('users', JSON.stringify(allUsers));
+        return true;
     } catch (e) {
         console.error(e);
         return false;
@@ -121,4 +117,5 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    bulkCreateUsers,
 };
