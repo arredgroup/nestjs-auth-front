@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from 'react';
 import { Container, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
@@ -19,22 +18,26 @@ export default function Users() {
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) {
             router.push('/login');
-        }
-        if (user?.roles?.includes('admin')) {
+        } else if (user.roles.includes('admin')) {
             getAllUsers();
-        }
-        if (user?.roles?.includes('user')) {
-            getUser(user.id);
+        } else if (user.roles.includes('user')) {
+            //getUser(user.id);
+            getAllUsers();
         }
     }, [filters]); // <-- Run when filters change
 
     const getAllUsers = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await AuthService.getUsers(filters, token);
-            setUsers(response);
+            const response = await AuthService.findUsers(filters, token);
+            if (response && response.message) { 
+                setUsers(response.message); 
+            } else {
+                setUsers([]); 
+            }
         } catch (error) {
             console.error('Error fetching users:', error);
+            setUsers([]); 
         }
     }
 
@@ -50,6 +53,7 @@ export default function Users() {
 
     const handleApplyFilters = (newFilters) => {
         setFilters(newFilters);
+        //console.log('New filters:', newFilters);
     }
 
     return (
@@ -69,12 +73,12 @@ export default function Users() {
                 </TableHead>
                 <TableBody>
                     {
-                        users.map((user) => (
+                        users.map((user) => ( 
                             <TableRow key={user.id}>
                                 <TableCell>{user.name}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{user.status ? 'ACTIVO' : 'CERRADO'}</TableCell>
-                                <TableCell>TBD</TableCell>
+                                <TableCell>{user.updatedAt}</TableCell> {/* Assuming this field exists in your backend response */}
                                 <TableCell>
                                     <IconButton color="primary" aria-label={"Editar usuario " + user.name} onClick={() => handleEdit(user)}>
                                         <Edit />
