@@ -1,118 +1,94 @@
-import axios from 'axios';
+const handleLogin = async (email, password) => {
+    try {
+        const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+        const foundUser = storedUsers.find(user => user.email === email && user.password === password);
 
-const handleLogin = async (user, pass) => {
-    try{
-        const response = await axios.post('http://localhost:3001/api/v1/auth/login', {
-            email: user,
-            password: pass,
-        });
-        //response.data contains a token in BASE64 format
-
-        const decoded = atob(response.data);
-        localStorage.setItem('token', response.data);
-        localStorage.setItem('user', decoded);
-        return true;
-    } catch (e) {
-        console.error(e);
+        if (foundUser) {
+            localStorage.setItem('user', JSON.stringify(foundUser));
+            return true;
+        } else {
+            throw new Error('Credenciales incorrectas');
+        }
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
         return false;
     }
-}
+};
 
 const getUsers = async () => {
-    try {
-        //const response = await axios.get('fakeapi');
-        const response = {
-            data: [
-                {
-                    id: 1,
-                    name: 'muhammad fake',
-                    email: 'a@b.cl',
-                    status: true
-                },
+    // Obtener los usuarios del localStorage
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+    return storedUsers;
+};
 
-                {
-                    id: 2,
-                    name: 'muhammed fake',
-                    email: 'b@b.cl',
-                    status: true
-                },
-                {
-                    id: 3,
-                    name: 'muhammid fake',
-                    email: 'c@b.cl',
-                    status: true
-                },
-            ]
-        }
-        return response.data;
-    } catch (e) {
-        console.error(e);
-        return [];
-    }
-}
+const getUserById = async (id) => {
+    // Simulando una respuesta exitosa del servidor
+    const users = await getUsers();
+    return users.find(user => user.id === id) || null;
+};
 
-const getUserById = async (id, token) => {
-    try {
-        const response = await axios.get('http://localhost:3001/api/v1/users/' + id, {
-            headers: {
-                token,
-            }
-        });
-        return response.data;
-    } catch(e){
-        console.error(e);
-        return null;
-    }
-}
-
-const logOut = async (token) => {
-    try {
-        const response = await axios.post('http://localhost:3001/api/v1/auth/logout', {}, {
-            headers: {
-                'token': token,
-            }
-        });
-        if(response.status !== 200){
-            return false;
-        }
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        return true;
-    } catch (e) {
-        console.error(e);
-        return false;
-    }
-}
+const logOut = async () => {
+    // Simulando una operación de cierre de sesión exitosa
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    return true;
+};
 
 const registerUser = async (name, email, password, password_second, cellphone) => {
-    try{
-        const response = await axios.post('http://localhost:3001/api/v1/auth/register', {
+    try {
+        if (password !== password_second) {
+            throw new Error('Passwords do not match');
+        }
+
+        const response = await fetch('http://localhost:3000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, password, password_second, cellphone })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al registrar usuario');
+        }
+
+        // Obtener los usuarios actuales del localStorage
+        let users = JSON.parse(localStorage.getItem('users'));
+
+        // Asegurarse de que users sea un array
+        if (!Array.isArray(users)) {
+            users = [];
+        }
+
+        // Agregar el nuevo usuario
+        const newUser = {
             name,
             email,
             password,
-            password_second,
-            cellphone,
-        });
-        return (response.status === 200);
-    }catch (e) {
-        console.error(e);
-        return false;
-    }
-}
+            cellphone
+        };
 
-const updateUser = async (id, user, token) => {
-    try {
-        const response = await axios.put('http://localhost:3001/api/v1/users/' + id, user, {
-            headers: {
-                token,
-            }
-        });
-        return (response.status === 200);
-    } catch (e) {
-        console.error(e);
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+
+        return true;
+    } catch (error) {
+        console.error('Error al registrar usuario:', error);
         return false;
     }
-}
+};
+
+
+const updateUser = async (id, user) => {
+    // Simulando una operación de actualización exitosa
+    return true;
+};
+
+const getAllUsers = async () => {
+    // Obtener los usuarios del localStorage
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+    return storedUsers;
+};
 
 export default {
     handleLogin,
@@ -121,4 +97,5 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    getAllUsers
 };

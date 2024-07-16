@@ -1,104 +1,115 @@
-"use client"
-import React from "react";
-import {Card, CardContent, Container} from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import SimpleSnackbar from "@/components/SimpleSnackbar";
-import AuthService from "@/services/AuthService";
-
-import './page.css';
+'use client'
+import React, { useState } from 'react';
+import { Card, CardContent, Container, TextField, Button, Stack } from '@mui/material';
+import SimpleSnackbar from '@/components/SimpleSnackbar';
+import AuthService from '../../services/AuthService';
+import Navbar from '@/components/Navbar'; 
 
 const Register = () => {
-    // Register from user -> name, email, password, cellphone
-    const [name, setName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [password_second, setPasswordSecond] = React.useState("");
-    const [cellphone, setCellphone] = React.useState("");
+    const [users, setUsers] = useState([{ name: '', email: '', password: '', password_second: '', cellphone: '' }]);
+    const [message, setMessage] = useState('');
+    const [openSnack, setOpenSnack] = useState(false);
 
-    const [message, setMessage] = React.useState("");
-    const [openSnack, setOpenSnack] = React.useState(false);
+    const handleAddUser = () => {
+        setUsers([...users, { name: '', email: '', password: '', password_second: '', cellphone: '' }]);
+    };
+
+    const handleRemoveUser = (index) => {
+        const updatedUsers = [...users];
+        updatedUsers.splice(index, 1);
+        setUsers(updatedUsers);
+    };
+
     const handleRegister = async () => {
-        if(password !== password_second){
-            setMessage("Las contraseñas no coinciden");
-            setOpenSnack(true);
-            return;
-        }
-        const response = await AuthService.registerUser(name, email, password, password_second, cellphone);
-        if(!response){
-            setMessage("Error al registrar usuario");
-            setOpenSnack(true);
+        const responses = await Promise.all(users.map(user =>
+            AuthService.registerUser(user.name, user.email, user.password, user.password_second, user.cellphone)
+        ));
+
+        const success = responses.every(response => response);
+        if (success) {
+            setMessage('Usuarios registrados exitosamente!');
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
         } else {
-            setMessage("Usuario Registrado Exitosamente!");
-            setOpenSnack(true);
+            setMessage('Error al registrar usuarios');
         }
-    }
+        setOpenSnack(true);
+    };
 
     return (
-        <Container>
-            <SimpleSnackbar message={message} openSnack={openSnack} closeSnack={() => {setOpenSnack(!openSnack)}}/>
-            <Card className="form">
-                <CardContent>
-                    <h1>Register User</h1>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Nombre"
-                            variant="outlined"
-                            required
-                            placeholder="Oleh Oleig"
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Email"
-                            variant="outlined"
-                            required
-                            placeholder="alfa@beta.cl"
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Contraseña"
-                            variant="outlined"
-                            required
-                            type="password"
-                            placeholder="****"
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Confirmar Contraseña"
-                            variant="outlined"
-                            type="password"
-                            required
-                            placeholder="****"
-                            onChange={(e) => setPasswordSecond(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Teléfono"
-                            variant="outlined"
-                            required
-                            placeholder="+56987654321"
-                            onChange={(e) => setCellphone(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <Button variant="contained" onClick={handleRegister}>Registrar</Button>
-                    </div>
-                </CardContent>
-            </Card>
-        </Container>
-    )
-}
+        <div>
+            <Navbar />
+            <Stack>
+                <SimpleSnackbar message={message} openSnack={openSnack} closeSnack={() => setOpenSnack(!openSnack)} />
+                {users.map((user, index) => (
+                    <Card key={index} className="form">
+                        <CardContent>
+                            <TextField
+                                label="Nombre"
+                                variant="outlined"
+                                required
+                                value={user.name}
+                                onChange={(e) => {
+                                    const updatedUsers = [...users];
+                                    updatedUsers[index].name = e.target.value;
+                                    setUsers(updatedUsers);
+                                }}
+                            />
+                            <TextField
+                                label="Email"
+                                variant="outlined"
+                                required
+                                value={user.email}
+                                onChange={(e) => {
+                                    const updatedUsers = [...users];
+                                    updatedUsers[index].email = e.target.value;
+                                    setUsers(updatedUsers);
+                                }}
+                            />
+                            <TextField
+                                label="Password"
+                                variant="outlined"
+                                required
+                                value={user.password}
+                                onChange={(e) => {
+                                    const updatedUsers = [...users];
+                                    updatedUsers[index].password = e.target.value;
+                                    setUsers(updatedUsers);
+                                }}
+                            />
+                            <TextField
+                                label="Confirm Password"
+                                variant="outlined"
+                                required
+                                value={user.password_second}
+                                onChange={(e) => {
+                                    const updatedUsers = [...users];
+                                    updatedUsers[index].password_second = e.target.value;
+                                    setUsers(updatedUsers);
+                                }}
+                            />
+                            <TextField
+                                label="Cellphone"
+                                variant="outlined"
+                                required
+                                value={user.cellphone}
+                                onChange={(e) => {
+                                    const updatedUsers = [...users];
+                                    updatedUsers[index].cellphone = e.target.value;
+                                    setUsers(updatedUsers);
+                                }}
+                            />
+                            {/* Otros campos como contraseña, confirmar contraseña, teléfono */}
+                            <Button variant="contained" color="secondary" onClick={() => handleRemoveUser(index)}>Eliminar Formulario</Button>
+                        </CardContent>
+                    </Card>
+                ))}
+                
+            </Stack>
+            <Button variant="contained" onClick={handleAddUser}>Agregar Formulario</Button>
+            <Button variant="contained" onClick={handleRegister}>Registrar Usuarios</Button>
+        </div>
+        
+    );
+};
 
 export default Register;
