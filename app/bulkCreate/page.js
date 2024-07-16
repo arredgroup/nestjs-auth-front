@@ -1,129 +1,126 @@
-"use client"
-import React from "react";
-import {Card, CardContent, Container} from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import AuthService from "@/services/AuthService";
+'use client';
+import React, { useState, useEffect } from 'react';
+import AuthService from "../../services/AuthService";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
+import Navbar from '../../components/Navbar';
 
-import {Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
-import {TableContainer, paper} from "@mui/material";
+export default function BulkCreate() {
+  const router = useRouter();
+  const [usersData, setUsersData] = useState([
+    { name: '', email: '', password: '', password_second: '', cellphone: '' },
+  ]);
+  const [message, setMessage] = useState('');
+  const [token, setToken] = useState("");
 
+  useEffect(() => {
+    setToken(localStorage.getItem('token'));
+  }, []);
 
+  const handleInputChange = (index, field, value) => {
+    const updatedUsersData = [...usersData];
+    updatedUsersData[index][field] = value;
+    setUsersData(updatedUsersData);
+  };
 
+  const handleAddUser = () => {
+    setUsersData([
+      ...usersData,
+      { name: '', email: '', password: '', password_second: '', cellphone: '' },
+    ]);
+  };
 
-export default function bulkCreate() {
-    // Register from user -> name, email, password, cellphone
+  const handleSubmit = async () => {
 
-    const [Data,setData]= React.useState([]);
+    console.log(usersData);
+    const response = await AuthService.handlebulkCreate(usersData,token);
+    console.log(response)
+  };
 
-    const [name, setName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [password_second, setPasswordSecond] = React.useState("");
-    const [cellphone, setCellphone] = React.useState("");
-
-    const handlebulkRegister = async () => {
-
-        const response = await AuthService.registerUser(Data);
-        
-            alert("error al registrar");
-
-    }
-
-    const handleOtroUsuario = async () => {
-
-        const response = await AuthService.handleBulkCreate(name, email, password, password_second, cellphone);
-    }
-    
-
-    return (
-        <Container>
-            <TableContainer component = {paper}>
-            <table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Nombre</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Password</TableCell>
-                        <TableCell>confierme password</TableCell>
-                        <TableCell>teléfono</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    <TableRow>
-                        <TableCell>
-                            <div className="input-form">
-                                <TextField
-                                id="nombre"
-                                label="Nombre"
-                                variant="outlined"
-                                required
-                                placeholder="Oleh Oleig"
-                                onChange={(e) => setName(e.target.value)}
-                                />
-                            </div>
-                        </TableCell>    
-                        <TableCell>
-                            <div className="input-form">
-                                <TextField
-                                id="email"
-                                label="Email"
-                                variant="outlined"
-                                required
-                                placeholder="alfa@beta.cl"
-                                onChange={(e) => setEmail(e.target.value)}
-                                />
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                            <div className="input-form">
-                                <TextField
-                                    id="password"
-                                    label="Contraseña"
-                                    variant="outlined"
-                                    required
-                                    type="password"
-                                    placeholder="****"
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                            <div className="input-form">
-                                <TextField
-                                    id="password_second"
-                                    label="Confirmar Contraseña"
-                                    variant="outlined"
-                                    type="password"
-                                    required
-                                    placeholder="****"
-                                    onChange={(e) => setPasswordSecond(e.target.value)}
-                                />
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                        <div className="input-form">
-                            <TextField
-                                id="cellphone"
-                                label="Teléfono"
-                                variant="outlined"
-                                required
-                                placeholder="+56987654321"
-                                onChange={(e) => setCellphone(e.target.value)}
-                            />
-                        </div>
-                        </TableCell>                   
-                    </TableRow>
-                </TableBody>
-            </table>
-            </TableContainer>
-            <div className="input-form">
-                    <Button variant="contained" onClick={handleOtroUsuario}>Agregar mas usuarios</Button>
-                </div>
-            <div className="input-form">
-                    <Button variant="contained" onClick={handlebulkRegister}>Registrar</Button>
-                </div>
-        </Container>
-        
-    )
+  return (
+    <Container>
+      <Navbar />
+      <h1>Crear Usuarios Masivamente</h1>
+      <Typography variant="body1" color="error">
+        {message}
+      </Typography>
+      <Box component={Paper} p={2}>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Contraseña</TableCell>
+                <TableCell>Confirmar Contraseña</TableCell>
+                <TableCell>Teléfono</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {usersData.map((user, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <TextField
+                      value={user.name}
+                      onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                      fullWidth
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      value={user.email}
+                      onChange={(e) => handleInputChange(index, 'email', e.target.value)}
+                      fullWidth
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      type="password"
+                      value={user.password}
+                      onChange={(e) => handleInputChange(index, 'password', e.target.value)}
+                      fullWidth
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      type="password"
+                      value={user.password_second}
+                      onChange={(e) => handleInputChange(index, 'password_second', e.target.value)}
+                      fullWidth
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      value={user.cellphone}
+                      onChange={(e) => handleInputChange(index, 'cellphone', e.target.value)}
+                      fullWidth
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Button variant="contained" onClick={handleAddUser}>
+          Agregar Usuario
+        </Button>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Crear Usuarios
+        </Button>
+      </Box>
+    </Container>
+  );
 }

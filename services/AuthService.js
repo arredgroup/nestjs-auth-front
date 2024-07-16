@@ -87,12 +87,17 @@ const registerUser = async (name, email, password, password_second, cellphone) =
     }
 }
 
-const handlebulkRegister = async (Data) => {
+const handlebulkCreate = async (Data,token) => {
     try{
-        const response = await axios.post('http://localhost:3001/api/v1/user/bulkCreate', {
-            Data
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate',
+            Data,
+            {
+            headers:{
+                'token':token
+            }
         });
-        return (response.status === 200);
+        
+        return (response);
     }catch (e) {
         console.error(e);
         return false;
@@ -120,5 +125,5 @@ export default {
     logOut,
     registerUser,
     updateUser,
-    handlebulkRegister
+    handlebulkCreate
 };
