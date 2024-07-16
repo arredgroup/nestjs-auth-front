@@ -65,6 +65,22 @@ const getUserById = async (id, token) => {
     }
 }
 
+const getfindUsers = async (query, token) => {
+    const queryparams = new URLSearchParams(query).toString();
+    try {
+        console.log("nquery",query);
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers?' + queryparams, {
+            headers: {
+                token,
+            }
+        });
+        return response.data;
+    } catch(e){
+        console.error(e);
+        return null;
+    }
+}
+
 const logOut = async (token) => {
     try {
         const response = await axios.post('http://localhost:3001/api/v1/auth/logout', {}, {
@@ -100,6 +116,23 @@ const registerUser = async (name, email, password, password_second, cellphone) =
     }
 }
 
+const bulkCreate = async (body, token) => {
+    console.log("Esta intentando enviar", body);
+    try {
+        console.log("Esta intentando enviar", body);
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', body, {
+            headers: {
+                'token': token,
+            }
+        });
+        console.log(response);
+        return (response);
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
 const updateUser = async (id, user, token) => {
     try {
         const response = await axios.put('http://localhost:3001/api/v1/users/' + id, user, {
@@ -121,4 +154,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    getfindUsers,
+    bulkCreate,
 };

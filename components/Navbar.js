@@ -3,6 +3,7 @@ import './Navbar.css';
 import Button from '@mui/material/Button';
 import AuthService from '@/services/AuthService';
 import { useRouter } from 'next/navigation';
+import Stack from '@mui/material/Stack';
 
 const Navbar = () => {
     const router = useRouter();
@@ -22,9 +23,13 @@ const Navbar = () => {
 
     return (
         <div className="navbar">
-            <div className="navbar-item">
+            <Stack direction="row" spacing={5} className="navbar-item">
                 {user?.name}
-            </div>
+                <Button onClick={() => router.push('/users')}>Home</Button>
+                <Button onClick={() => router.push('/findUsers')}>Buscar</Button>
+                <Button onClick={() => router.push('/bulkCreate')}>Ingresar usuarios</Button>
+                
+            </Stack>
             <div className="navbar-item">
                 <Button onClick={handleLogout}>
                     Logout
