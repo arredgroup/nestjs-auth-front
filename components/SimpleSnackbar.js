@@ -12,7 +12,6 @@ const SimpleSnackbar = (props)  => {
         if (reason === 'clickaway') {
             return;
         }
-
         closeSnack();
     };
 
@@ -36,7 +35,7 @@ const SimpleSnackbar = (props)  => {
                 autoHideDuration={6000}
                 onClose={handleClose}
                 message={message}
-                //action={action}
+                action={action}
             />
         </div>
     );
