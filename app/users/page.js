@@ -13,11 +13,11 @@ export default function Users(){
 
     const router = useRouter();
     const [users, setUsers] = useState([]);
-
+    
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
-
-         if(!user){
+	
+        if(!user){
             router.push('/login');
          }
 	getAllUsers();
@@ -26,7 +26,6 @@ export default function Users(){
 
     const getAllUsers = async () => {
 	const response  = await UserService.getAllUsers();
-	console.log(response);
         setUsers(response.data);
     }
 
