@@ -7,6 +7,7 @@ const handleLogin = async (user, pass) => {
             password: pass,
         });
         //response.data contains a token in BASE64 format
+        console.log('Token recibido:', response.data);
 
         const decoded = atob(response.data);
         localStorage.setItem('token', response.data);
@@ -18,38 +19,51 @@ const handleLogin = async (user, pass) => {
     }
 }
 
-const getUsers = async () => {
+const getUsers = async (token) => {
     try {
-        //const response = await axios.get('fakeapi');
-        const response = {
-            data: [
-                {
-                    id: 1,
-                    name: 'muhammad fake',
-                    email: 'a@b.cl',
-                    status: true
-                },
-
-                {
-                    id: 2,
-                    name: 'muhammed fake',
-                    email: 'b@b.cl',
-                    status: true
-                },
-                {
-                    id: 3,
-                    name: 'muhammid fake',
-                    email: 'c@b.cl',
-                    status: true
-                },
-            ]
-        }
-        return response.data;
+        const response = await axios.get('http://localhost:3001/api/v1/users/getAllUsers', {
+            headers: {
+                token,
+            }
+        });
+        return (response.data);
     } catch (e) {
         console.error(e);
         return [];
     }
 }
+
+const findUsers = async (token, filters) => {
+    try{
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers', {
+            headers: {
+                token
+            },
+            params: {
+                ...filters
+            }
+        });
+        return (response.data);
+    }catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+
+const bulkCreateUsers = async (token, users) => {
+    try {
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', users, {
+            headers: {
+                token
+            }
+        });
+        return response.data;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+};
 
 const getUserById = async (id, token) => {
     try {
@@ -121,4 +135,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    findUsers,
+    bulkCreateUsers,
 };
