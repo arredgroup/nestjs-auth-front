@@ -7,7 +7,6 @@ import {Edit} from "@mui/icons-material";
 import AuthService from "../../services/AuthService";
 import { useRouter } from 'next/navigation';
 import Navbar from '../../components/Navbar';
-
 export default function Users(){
 
     const router = useRouter();
@@ -41,6 +40,12 @@ export default function Users(){
         router.push('/users/' + user.id + '/edit');
     }
 
+    const handleList = () => {
+        router.push('/userList');
+    }
+    const handleCreateMany = () => {
+        router.push('/bulckCreateUsers');
+    }
     return (
         <Container>
             <Navbar />
@@ -73,6 +78,8 @@ export default function Users(){
                     }
                 </TableBody>
             </Table>
+            <IconButton color="primary" aria-label='Ver lista de usuarios' onClick={handleList}>Ver Lista de Usuarios</IconButton> <br />
+            <IconButton color="primary" aria-label='Crear Varios Usuarios' onClick={handleCreateMany}>Crear Varios Usuarios</IconButton>
         </Container>
     )
 }
