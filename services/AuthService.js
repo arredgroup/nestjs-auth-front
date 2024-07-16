@@ -116,6 +116,23 @@ const registerUser = async (name, email, password, password_second, cellphone) =
     }
 }
 
+const bulkCreate = async (body, token) => {
+    console.log("Esta intentando enviar", body);
+    try {
+        console.log("Esta intentando enviar", body);
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', body, {
+            headers: {
+                'token': token,
+            }
+        });
+        console.log(response);
+        return (response);
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
 const updateUser = async (id, user, token) => {
     try {
         const response = await axios.put('http://localhost:3001/api/v1/users/' + id, user, {
@@ -138,4 +155,5 @@ export default {
     registerUser,
     updateUser,
     getfindUsers,
+    bulkCreate,
 };

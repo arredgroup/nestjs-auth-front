@@ -27,7 +27,7 @@ const Navbar = () => {
                 {user?.name}
                 <Button onClick={() => router.push('/users')}>Home</Button>
                 <Button onClick={() => router.push('/findUsers')}>Buscar</Button>
-                <Button onClick={() => router.push('/profile')}>Profile</Button>
+                <Button onClick={() => router.push('/bulkCreate')}>Ingresar usuarios</Button>
                 
             </Stack>
             <div className="navbar-item">
