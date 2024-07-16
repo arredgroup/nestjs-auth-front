@@ -1,0 +1,55 @@
+/* BulkCreate.css */
+.bulk-create-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bulk-create-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+  }
+  
+  .forms-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .form-container {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bulk-create-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .bulk-create-actions Button {
+    flex: 1;
+    margin: 0 0.5rem;
+  }
+  
+  .bulk-create-actions Button:first-child {
+    margin-left: 0;
+  }
+  
+  .bulk-create-actions Button:last-child {
+    margin-right: 0;
+  }
+  
