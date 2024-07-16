@@ -6,24 +6,28 @@ import Button from "@mui/material/Button";
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 import { useRouter } from 'next/navigation';
 
+
 import AuthService from '../../services/AuthService';
 
 import './page.css';
 
 export default function Login(){
     const router = useRouter();
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [state, setState] = useState(true);
+    const [message, setMessage] = useState('');
 
     const handleLogin = async () => {
-        const login = await AuthService.handleLogin(email, password);
-        setState(login);
-        if(login){
-            router.push('/users');
+        const user = AuthService.handleLogin(email, password);
+        if (user) {
+            setMessage('Inicio de sesión exitoso!');
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+            router.push('/users'); // Redirige al usuario a la página /users
+        } else {
+            setMessage('Usuario o contraseña incorrectos');
         }
-    }
+    };
 
     const handleRegister = () => {
         router.push('/register');
