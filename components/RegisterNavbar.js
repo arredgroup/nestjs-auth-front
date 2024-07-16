@@ -5,21 +5,18 @@ import Button from '@mui/material/Button';
 import AuthService from '@/services/AuthService';
 import { useRouter } from 'next/navigation';
 
-const Navbar = () => {
+const RegisterNavbar = () => {
     const router = useRouter();
     const [user, setUser] = useState({ name: "" });
 
     useEffect(() => {
-        const storedUser = JSON.parse(localStorage.getItem('user'));
-        if (storedUser) {
-            setUser(storedUser);
-        }
+        setUser(JSON.parse(localStorage.getItem('user')));
     }, []);
 
     const handleLogout = async () => {
         const token = localStorage.getItem('token');
         const result = await AuthService.logOut(token);
-        if (result) {
+        if(result){
             localStorage.removeItem('user');
             localStorage.removeItem('token');
             router.push('/login');
@@ -32,18 +29,19 @@ const Navbar = () => {
                 {user?.name ? `Hola, ${user.name}` : ''}
             </div>
             <div className="navbar-item">
-                <Button onClick={() => router.push('/')}>
+                <Button onClick={() => router.push('/register')}>
                     Inicio
                 </Button>
-                <Button onClick={() => router.push('/register')}>
-                    Crear Usuarios
+                <Button onClick={() => router.push('/users')}>
+                    Lista de Usuarios
                 </Button>
                 <Button onClick={handleLogout}>
                     Cerrar Sesión
                 </Button>
+                
             </div>
         </div>
     );
 }
 
-export default Navbar;
+export default RegisterNavbar;

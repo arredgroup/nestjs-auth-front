@@ -1,11 +1,76 @@
 @import '../globals.css';
 
-.form {
-    background: var(--primary-100);
+/* General container styling */
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh; /* Reducir la altura mínima */
+    background-color: #cbd4e3; /* Color de fondo claro y agradable */
     padding: 1rem;
-    margin: 1rem;
 }
 
-.input-form {
+/* Card styling */
+.login-box, .form {
+    background: rgba(255, 255, 255, 0.807);
+    padding: 2rem;
     margin: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px; /* Aumentar el ancho máximo */
+    text-align: center; /* Asegura que el contenido dentro esté centrado */
 }
+
+.login-box h1, .form h1 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--primary-600);
+}
+
+/* Input form styling */
+.input-form {
+    margin-bottom: 1rem;
+    width: 100%; /* Asegura que el campo ocupe todo el ancho disponible */
+    max-width: 800px; /* Ajusta el ancho máximo del campo */
+}
+
+.input-form:last-child {
+    margin-bottom: 0;
+}
+
+/* TextField styling */
+.MuiTextField-root {
+    width: 100%; /* Asegura que el campo ocupe todo el ancho disponible */
+    max-width: 800px; /* Ajusta el ancho máximo del campo */
+}
+
+/* Button styling */
+.MuiButton-root {
+    margin: 0.5rem 0;
+}
+
+.MuiButton-containedPrimary {
+    background-color: var(--primary-500);
+    color: rgb(0, 0, 0);
+}
+
+.MuiButton-containedPrimary:hover {
+    background-color: var(--primary-700);
+}
+
+/* Snackbar styling */
+.MuiSnackbar-root {
+    bottom: 2rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .login-box, .form {
+        padding: 1rem;
+        margin: 0.5rem;
+        width: calc(100% - 1rem);
+    }
+}
+
