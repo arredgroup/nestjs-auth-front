@@ -1,50 +1,93 @@
-"use client"
-import React, {useEffect, useState} from 'react';
-import {Container, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
-import IconButton from '@mui/material/IconButton';
-import {Edit} from "@mui/icons-material";
-
-import AuthService from "../../services/AuthService";
+"use client";
+import React, { useEffect, useState } from 'react';
+import { Container, Table, TableBody, TableCell, TableHead, TableRow, Button, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { useRouter } from 'next/navigation';
 import Navbar from '../../components/Navbar';
 
-export default function Users(){
-
+export default function Users() {
     const router = useRouter();
     const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [filterName, setFilterName] = useState("");
+    const [filterStatus, setFilterStatus] = useState("");
+    const [filterDateFrom, setFilterDateFrom] = useState("");
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if(!user){
+        const token = localStorage.getItem('token');
+        if (!token) {
             router.push('/login');
-        }
-        if(user?.roles?.includes('admin')){
-            getAllUsers();
-        }
-        if(user?.roles?.includes('user')){
-            getUser(user.id);
+        } else {
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            setUsers(registeredUsers);
+            setFilteredUsers(registeredUsers); 
         }
     }, []);
 
-    const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
-        setUsers(data);
-    }
+    const handleLogout = () => {
+        const currentUser = JSON.parse(localStorage.getItem('user'));
+        if (currentUser) {
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            const userIndex = registeredUsers.findIndex(user => user.email === currentUser.email);
+            if (userIndex !== -1) {
+                registeredUsers[userIndex].status = 'false'; 
+                localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            }
+        }
 
-    const getUser = async (id) => {
-        const token = localStorage.getItem('token');
-        const data = await AuthService.getUserById(id, token);
-        setUsers([data]);
-    }
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        router.push('/login');
+    };
 
-    const handleEdit = (user) => {
-        router.push('/users/' + user.id + '/edit');
-    }
+    const handleFilter = () => {
+        let filtered = users;
+        if (filterName) {
+            filtered = filtered.filter(user => user.name.toLowerCase().includes(filterName.toLowerCase()));
+        }
+        if (filterStatus) {
+            filtered = filtered.filter(user => user.status === filterStatus || (!user.status && filterStatus === 'false'));
+        }
+        if (filterDateFrom) {
+            filtered = filtered.filter(user => new Date(user.loginDate) >= new Date(filterDateFrom));
+        }
+        setFilteredUsers(filtered);
+    };
 
     return (
         <Container>
             <Navbar />
-            <h1>Users</h1>
+            <h1>Lista de usuarios</h1>
+            <Button variant="contained" color="secondary" onClick={handleLogout}>Logout</Button>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20 }}>
+                <TextField
+                    label="Filter by Name"
+                    variant="outlined"
+                    value={filterName}
+                    onChange={(e) => setFilterName(e.target.value)}
+                    style={{ marginRight: 10 }}
+                />
+                <FormControl variant="outlined" style={{ marginRight: 10, minWidth: 150 }}>
+                    <InputLabel>Filter by Status</InputLabel>
+                    <Select
+                        label="Filter by Status"
+                        value={filterStatus}
+                        onChange={(e) => setFilterStatus(e.target.value)}
+                    >
+                        <MenuItem value="">All</MenuItem>
+                        <MenuItem value="true">true</MenuItem>
+                        <MenuItem value="false">false</MenuItem>
+                    </Select>
+                </FormControl>
+                <TextField
+                    label="Date From"
+                    type="date"
+                    InputLabelProps={{ shrink: true }}
+                    value={filterDateFrom}
+                    onChange={(e) => setFilterDateFrom(e.target.value)}
+                    style={{ marginRight: 10 }}
+                />
+                <Button variant="contained" onClick={handleFilter}>Apply Filters</Button>
+            </div>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -52,27 +95,19 @@ export default function Users(){
                         <TableCell>Email</TableCell>
                         <TableCell>Estado</TableCell>
                         <TableCell>Última Sesión</TableCell>
-                        <TableCell>Acciones</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {
-                        users.map((user) => (
-                            <TableRow key={user}>
-                                <TableCell>{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.status? 'ACTIVO' : 'CERRADO'}</TableCell>
-                                <TableCell>TBD</TableCell>
-                                <TableCell>
-                                    <IconButton color="primary" aria-label={"Editar usuario " + user.name} onClick={() => handleEdit(user)}>
-                                        <Edit />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    }
+                    {filteredUsers.map((user, index) => (
+                        <TableRow key={index}>
+                            <TableCell>{user.name}</TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>{user.status === 'true' ? 'true' : 'false'}</TableCell>
+                            <TableCell>{user.loginDate ? new Date(user.loginDate).toLocaleString() : 'N/A'}</TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </Container>
-    )
+    );
 }

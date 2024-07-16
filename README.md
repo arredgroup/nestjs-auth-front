@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+Mi proyecto simula la base de datos en "localStorage", es decir, no implementa el Backend del proyecto final del electivo
+Backend. Para probar las funcionalidades se debe registrar usuario a traves del formulario de registros, para que estos se guarden 
+localmente, y puedan ser utilizados para probar las funcionalidades de las vistas.
+
+Cabe agregar que si duplica la pestaña de login, el proyecto simula el ingreso de usuarios simultaneos, permitiendo filtrar por estas (true or false),
+fecha de ingreso, iniciales o numeros para usuario.
+
+
+
