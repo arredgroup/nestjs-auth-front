@@ -22,7 +22,7 @@ export default function Users(){
             getAllUsers();
         }
         if(user?.roles?.includes('user')){
-            getAllUser();
+            getAllUsers();
         }
     }, []);
 

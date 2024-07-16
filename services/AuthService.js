@@ -131,16 +131,18 @@ const findUser = async (req, token) => {
     }
 }
 
-const bulkCreateUsers = async (users, token) => {
+const bulkCreate = async (users, token) => {
     try{
-        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', users,{
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', {
+            users,
             headers: {
                 token
             }
         });
+        console.log('Creado con exito');
         return response.data;
     }catch{
-        console.error(e);
+        console.error('no es posible');
         return false;
     }
 }
@@ -152,6 +154,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
-    bulkCreateUsers,
+    bulkCreate,
     findUser,
 };

@@ -21,19 +21,23 @@ const Navbar = () => {
         }
     }
 
+    const handleNavigator= (route) => {
+        router.push('/users/' + user.id + '/'+ route);
+    }
+
     return (
         <div className="navbar">
             <div className="navbar-item">
                 {user?.name}
             </div>
             <div className="navbar-item">
-                <Button variant='contained' onClick={()=>router.push('/bulkCreate')}> Crear Usuario </Button>
+                <Button variant='contained' style={{backgroundColor:'green'}} onClick={() => handleNavigator('bulkCreate')}>Crear Usuario</Button>
             </div>
             <div className='navbar-item'>
-                <Button variant='contained' onClick={()=>router.push('/find')}> Buscar Usuarios </Button>
+                <Button variant='contained' style={{backgroundColor:'green'}} onClick={() => handleNavigator('find')}>Buscar Usuarios</Button>
             </div>
             <div className='navbar-item'>
-                <Button variant='contained' onClick={()=>router.push('/users')}> Usuarios </Button>
+                <Button variant='contained' style={{backgroundColor:'green'}} onClick={()=>router.push('/users')}>Usuarios</Button>
             </div>
             <div className='navbar-item'>
                 <Button variant='contained' onClick={handleLogout} style={{backgroundColor: 'red'}}>Cerrar sesión</Button>
