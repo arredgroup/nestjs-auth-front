@@ -1,0 +1,22 @@
+.form {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #ffffff07;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-title {
+    font-size: 1.5rem; /* Disminuye el tamaño de la letra aquí */
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  .input-form {
+    margin-bottom: 1rem;
+  }
+  
+  .input-form TextField {
+    width: 100%;
+  }
+  
