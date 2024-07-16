@@ -1,6 +1,6 @@
 "use client"
 import React, {useEffect, useState} from 'react';
-import {Container, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import {Container, Table, TableBody, TableCell, TableHead, TableRow, Button} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import {Edit} from "@mui/icons-material";
 
@@ -27,7 +27,8 @@ export default function Users(){
     }, []);
 
     const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
+        const token = localStorage.getItem('token');
+        const data = await AuthService.getUsers(token);
         setUsers(data);
     }
 
@@ -41,10 +42,20 @@ export default function Users(){
         router.push('/users/' + user.id + '/edit');
     }
 
+    const Filters = () => {
+        router.push('/users/filters');
+    };
+
+    const bulk = () => {
+        router.push('/users/bulkCreate');
+    };
+
     return (
         <Container>
             <Navbar />
             <h1>Users</h1>
+            <Button onClick={Filters}>Find Users</Button>
+            <Button onClick={bulk}>bulkCreate</Button>
             <Table>
                 <TableHead>
                     <TableRow>
