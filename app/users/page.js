@@ -1,50 +1,74 @@
-"use client"
-import React, {useEffect, useState} from 'react';
-import {Container, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
-import IconButton from '@mui/material/IconButton';
-import {Edit} from "@mui/icons-material";
-
+"use client";
+import React, { useEffect, useState } from "react";
+import {
+    Container,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Button,
+} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import { Edit } from "@mui/icons-material";
 import AuthService from "../../services/AuthService";
-import { useRouter } from 'next/navigation';
-import Navbar from '../../components/Navbar';
+import { useRouter } from "next/navigation";
+import Navbar from "../../components/Navbar";
+import Link from "next/link";
 
-export default function Users(){
+import "./page.css";
 
+export default function Users() {
     const router = useRouter();
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if(!user){
-            router.push('/login');
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            router.push("/login");
         }
-        if(user?.roles?.includes('admin')){
+        if (user?.roles?.includes("admin")) {
             getAllUsers();
         }
-        if(user?.roles?.includes('user')){
+        if (user?.roles?.includes("user")) {
             getUser(user.id);
         }
     }, []);
 
     const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
+        const token = localStorage.getItem("token");
+        const data = await AuthService.getUsers(token);
         setUsers(data);
-    }
+    };
 
     const getUser = async (id) => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         const data = await AuthService.getUserById(id, token);
         setUsers([data]);
-    }
+    };
 
     const handleEdit = (user) => {
-        router.push('/users/' + user.id + '/edit');
-    }
+        router.push("/users/" + user.id + "/edit");
+    };
 
     return (
         <Container>
             <Navbar />
             <h1>Users</h1>
+            <Button
+                onClick={() => {
+                    router.push("/users/find");
+                }}
+            >
+                Filtrar usuarios
+            </Button>
+            <Button
+                onClick={() => {
+                    router.push("/users/bulk-create");
+                }}
+            >
+                Crear usuarios
+            </Button>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -56,23 +80,27 @@ export default function Users(){
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {
-                        users.map((user) => (
-                            <TableRow key={user}>
-                                <TableCell>{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.status? 'ACTIVO' : 'CERRADO'}</TableCell>
-                                <TableCell>TBD</TableCell>
-                                <TableCell>
-                                    <IconButton color="primary" aria-label={"Editar usuario " + user.name} onClick={() => handleEdit(user)}>
-                                        <Edit />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    }
+                    {users.map((user) => (
+                        <TableRow key={user}>
+                            <TableCell>{user.name}</TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>
+                                {user.status ? "ACTIVO" : "CERRADO"}
+                            </TableCell>
+                            <TableCell>TBD</TableCell>
+                            <TableCell>
+                                <IconButton
+                                    color="primary"
+                                    aria-label={"Editar usuario " + user.name}
+                                    onClick={() => handleEdit(user)}
+                                >
+                                    <Edit />
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </Container>
-    )
+    );
 }
