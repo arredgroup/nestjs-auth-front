@@ -17,39 +17,21 @@ const handleLogin = async (user, pass) => {
         return false;
     }
 }
-
-const getUsers = async () => {
+const getUsers = async (filters, token) => {
     try {
-        //const response = await axios.get('fakeapi');
-        const response = {
-            data: [
-                {
-                    id: 1,
-                    name: 'muhammad fake',
-                    email: 'a@b.cl',
-                    status: true
-                },
-
-                {
-                    id: 2,
-                    name: 'muhammed fake',
-                    email: 'b@b.cl',
-                    status: true
-                },
-                {
-                    id: 3,
-                    name: 'muhammid fake',
-                    email: 'c@b.cl',
-                    status: true
-                },
-            ]
-        }
+        const queryParams = new URLSearchParams(filters).toString();
+        
+        const response = await axios.get(`http://localhost:3001/api/v1/users/findUsers/${userId}?${queryParams}`, {
+            headers: {
+                token,
+            }
+        });
         return response.data;
-    } catch (e) {
-        console.error(e);
+    } catch (error) {
+        console.error(error);
         return [];
     }
-}
+};
 
 const getUserById = async (id, token) => {
     try {
@@ -114,6 +96,28 @@ const updateUser = async (id, user, token) => {
     }
 }
 
+const findUsers = async (filters, userId, token) => {
+    try {
+        const queryParams = new URLSearchParams(filters).toString();
+        const response = await axios.get(`http://localhost:3001/api/v1/users/findUsers/${userId}?${queryParams}`, { headers: { token } });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+};
+
+
+const bulkCreate = async (users, id, token) => {
+    try {
+        const response = await axios.post(`http://localhost:3001/api/v1/users/bulkCreate/${id}`, { users }, { headers: { token } });
+        return response.data;
+    } catch (e) {
+        console.error(e);
+        return { successCount: 0, failureCount: users.length };
+    }
+};
+
 export default {
     handleLogin,
     getUsers,
@@ -121,4 +125,6 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    findUsers,
+    bulkCreate
 };
