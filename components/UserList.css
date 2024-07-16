@@ -1,0 +1,26 @@
+.user-list-container {
+  padding: 20px;
+}
+
+.filter-form {
+  margin-bottom: 20px;
+}
+
+.filter-form input,
+.filter-form select,
+.filter-form button {
+  margin-right: 10px;
+}
+
+.filter-form button {
+  padding: 5px 10px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
