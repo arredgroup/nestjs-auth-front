@@ -21,8 +21,8 @@ export default function Users() {
         } else if (user.roles.includes('admin')) {
             getAllUsers();
         } else if (user.roles.includes('user')) {
-            //getUser(user.id);
-            getAllUsers();
+            getUser(user.id);
+            //getAllUsers();
         }
     }, [filters]); // <-- Run when filters change
 
