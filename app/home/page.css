@@ -1,0 +1,19 @@
+@import '../globals.css';
+.flex-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.login-box {
+    flex: 1 1 auto;
+    width: 300px;
+    margin-top: 30vh;
+    text-align: center;
+    background: var(--primary-100);
+}
+.login-box-child {
+    flex: 1 1 auto;
+    margin: 1rem;
+}

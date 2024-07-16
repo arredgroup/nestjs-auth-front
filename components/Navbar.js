@@ -26,9 +26,16 @@ const Navbar = () => {
                 {user?.name}
             </div>
             <div className="navbar-item">
-                <Button onClick={handleLogout}>
-                    Logout
-                </Button>
+                <Button variant='contained' onClick={()=>router.push('/bulkCreate')}> Crear Usuario </Button>
+            </div>
+            <div className='navbar-item'>
+                <Button variant='contained' onClick={()=>router.push('/find')}> Buscar Usuarios </Button>
+            </div>
+            <div className='navbar-item'>
+                <Button variant='contained' onClick={()=>router.push('/users')}> Usuarios </Button>
+            </div>
+            <div className='navbar-item'>
+                <Button variant='contained' onClick={handleLogout} style={{backgroundColor: 'red'}}> Finalizar sesión </Button>
             </div>
         </div>
     )
