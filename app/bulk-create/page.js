@@ -17,7 +17,7 @@ export default function BulkCreateUsers() {
             router.push('/login');
         }
         if (user?.roles?.includes('admin')) {
-            getAllUsers();
+            getUser(user.id);
         }
         if (user?.roles?.includes('user')) {
             getUser(user.id);
@@ -43,7 +43,7 @@ export default function BulkCreateUsers() {
     const handleSubmit = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await AuthService.bulkCreate({ users }, token);
+            const response = await AuthService.bulkCreate(users, currentUser.id, token);
             console.log('Bulk create response:', response);
         } catch (error) {
             console.error('Error bulk creating users:', error);

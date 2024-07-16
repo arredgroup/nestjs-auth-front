@@ -125,9 +125,9 @@ const findUsers = async (filters, token) => {
     }
 };
 
-const bulkCreate = async (users, token) => {
+const bulkCreate = async (users, id, token) => {
     try {
-        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', { users }, { headers: { token } });
+        const response = await axios.post(`http://localhost:3001/api/v1/users/bulkCreate/${id}`, { users }, { headers: { token } });
         return response.data;
     } catch (e) {
         console.error(e);
