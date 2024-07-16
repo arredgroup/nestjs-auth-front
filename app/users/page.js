@@ -22,12 +22,13 @@ export default function Users(){
             getAllUsers();
         }
         if(user?.roles?.includes('user')){
-            getUser(user.id);
+            getAllUsers();
         }
     }, []);
 
     const getAllUsers = async () => {
-        const data = await AuthService.getUsers();
+        const token = localStorage.getItem('token');
+        const data = await AuthService.findUser('', token);
         setUsers(data);
     }
 
