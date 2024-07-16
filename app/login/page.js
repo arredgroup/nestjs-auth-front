@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Card, CardContent, Container} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
@@ -17,6 +17,12 @@ export default function Login(){
     const [password, setPassword] = useState("");
     const [state, setState] = useState(true);
 
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            router.push('/users');
+        }
+    }, []);
     const handleLogin = async () => {
         const login = await AuthService.handleLogin(email, password);
         setState(login);
@@ -36,11 +42,9 @@ export default function Login(){
                     <div className={"login-box-child"}>
                         <h1>Inicia Sesión</h1>
                     </div>
-                    <SimpleSnackbar message={"Usuario o contraseña incorrectos"} openSnack={!state}
-                                    closeSnack={() => setState(true)}/>
                     <div className={"login-box-child"}>
                         <TextField
-                            id="outlined-basic"
+                            id="outlined"
                             label="Email"
                             variant="outlined"
                             placeholder="alfa@beta.cl"

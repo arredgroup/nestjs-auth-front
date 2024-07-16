@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import AuthService from '@/services/AuthService';
 import { useRouter } from 'next/navigation';
 
+
 const Navbar = () => {
     const router = useRouter();
     const [user, setUser] = useState({name:""});
@@ -24,6 +25,11 @@ const Navbar = () => {
         <div className="navbar">
             <div className="navbar-item">
                 {user?.name}
+            </div>
+            <div className="navbar-item">
+                <Button onClick={() => router.push('/bulkCreate')}>
+                    BulkCreate
+                </Button>
             </div>
             <div className="navbar-item">
                 <Button onClick={handleLogout}>

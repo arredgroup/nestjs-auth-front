@@ -3,7 +3,6 @@ import React from "react";
 import {Card, CardContent, Container} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import SimpleSnackbar from "@/components/SimpleSnackbar";
 import AuthService from "@/services/AuthService";
 
 import './page.css';
@@ -16,33 +15,29 @@ const Register = () => {
     const [password_second, setPasswordSecond] = React.useState("");
     const [cellphone, setCellphone] = React.useState("");
 
-    const [message, setMessage] = React.useState("");
-    const [openSnack, setOpenSnack] = React.useState(false);
     const handleRegister = async () => {
         if(password !== password_second){
-            setMessage("Las contraseñas no coinciden");
-            setOpenSnack(true);
+            alert("las passwords deben ser iguales")
             return;
         }
         const response = await AuthService.registerUser(name, email, password, password_second, cellphone);
-        if(!response){
-            setMessage("Error al registrar usuario");
-            setOpenSnack(true);
-        } else {
-            setMessage("Usuario Registrado Exitosamente!");
-            setOpenSnack(true);
+        if (response === false){
+            alert("error al registrar");
+        }
+        else{
+            alert("registrado con éxtito");
         }
     }
+    
 
     return (
         <Container>
-            <SimpleSnackbar message={message} openSnack={openSnack} closeSnack={() => {setOpenSnack(!openSnack)}}/>
             <Card className="form">
                 <CardContent>
                     <h1>Register User</h1>
                     <div className="input-form">
                         <TextField
-                            id="outlined-basic"
+                            id="nombre"
                             label="Nombre"
                             variant="outlined"
                             required
@@ -52,7 +47,7 @@ const Register = () => {
                     </div>
                     <div className="input-form">
                         <TextField
-                            id="outlined-basic"
+                            id="email"
                             label="Email"
                             variant="outlined"
                             required
@@ -62,7 +57,7 @@ const Register = () => {
                     </div>
                     <div className="input-form">
                         <TextField
-                            id="outlined-basic"
+                            id="password"
                             label="Contraseña"
                             variant="outlined"
                             required
@@ -73,7 +68,7 @@ const Register = () => {
                     </div>
                     <div className="input-form">
                         <TextField
-                            id="outlined-basic"
+                            id="password_second"
                             label="Confirmar Contraseña"
                             variant="outlined"
                             type="password"
@@ -84,7 +79,7 @@ const Register = () => {
                     </div>
                     <div className="input-form">
                         <TextField
-                            id="outlined-basic"
+                            id="cellphone"
                             label="Teléfono"
                             variant="outlined"
                             required

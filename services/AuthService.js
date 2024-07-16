@@ -18,32 +18,19 @@ const handleLogin = async (user, pass) => {
     }
 }
 
-const getUsers = async () => {
+const findUsers = async (name,active,login_after_date,login_before_date,token) => {
     try {
-        //const response = await axios.get('fakeapi');
-        const response = {
-            data: [
-                {
-                    id: 1,
-                    name: 'muhammad fake',
-                    email: 'a@b.cl',
-                    status: true
-                },
-
-                {
-                    id: 2,
-                    name: 'muhammed fake',
-                    email: 'b@b.cl',
-                    status: true
-                },
-                {
-                    id: 3,
-                    name: 'muhammid fake',
-                    email: 'c@b.cl',
-                    status: true
-                },
-            ]
-        }
+        let queryParams = new URLSearchParams();
+        if (login_before_date) queryParams.append('login_before_date', login_before_date);
+        if (login_after_date) queryParams.append('login_after_date', login_after_date);
+        if (name) queryParams.append('name', name);
+        if (active !== undefined) queryParams.append('active', active);
+        const response = await axios.get('http://localhost:3001/api/v1/users/findUsers?' + queryParams.toString(), {
+            headers: {
+                'token':token,
+            }
+        });
+        console.log(response.data);
         return response.data;
     } catch (e) {
         console.error(e);
@@ -55,7 +42,7 @@ const getUserById = async (id, token) => {
     try {
         const response = await axios.get('http://localhost:3001/api/v1/users/' + id, {
             headers: {
-                token,
+                'token': token,
             }
         });
         return response.data;
@@ -91,9 +78,26 @@ const registerUser = async (name, email, password, password_second, cellphone) =
             email,
             password,
             password_second,
-            cellphone,
+            cellphone
         });
         return (response.status === 200);
+    }catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+const handlebulkCreate = async (Data,token) => {
+    try{
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate',
+            Data,
+            {
+            headers:{
+                'token':token
+            }
+        });
+        
+        return (response);
     }catch (e) {
         console.error(e);
         return false;
@@ -116,9 +120,10 @@ const updateUser = async (id, user, token) => {
 
 export default {
     handleLogin,
-    getUsers,
+    findUsers,
     getUserById,
     logOut,
     registerUser,
     updateUser,
+    handlebulkCreate
 };
