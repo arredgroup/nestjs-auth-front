@@ -32,9 +32,8 @@ export default function UserList() {
     const [userStatus, setUserStatus] = useState('');
     const [loginAfterDate, setLoginAfterDate] = useState(null);
     const [loginBeforeDate, setLoginBeforeDate] = useState(null);
-
-
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const getAllUsers = async () => {
         const token = localStorage.getItem('token');
@@ -46,8 +45,6 @@ export default function UserList() {
         const token = localStorage.getItem('token');
         const afterDate = loginAfterDate && new Date(loginAfterDate);
         const beforeDate = loginBeforeDate && new Date(loginBeforeDate);
-
-        console.log("date page:", afterDate);
 
         const data = await AuthService.getFilterUsers(
             token, 
@@ -93,17 +90,19 @@ export default function UserList() {
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) {
+        if(!user || user.expiration < Date.now()){
             router.push('/login');
-        } else {
-            getAllUsers();
+            return;
         }
+
+        getAllUsers();
+        setLoading(null);
     }, []);
 
 
     return (
 
-        <Container style={{ "display": "flex", "flexDirection": "column", "gap": "2rem" }}>
+        loading ?? <Container style={{ "display": "flex", "flexDirection": "column", "gap": "2rem" }}>
             <Navbar section="1"></Navbar>
             <h1>Lista de usuarios</h1>
             <Card className='form-container'>

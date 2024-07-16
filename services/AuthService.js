@@ -165,6 +165,23 @@ const getFilterUsers = async (token, name, active, afterDate, beforeDate) => {
     }
 };
 
+const bulkCrateUsers = async (token, users) => {
+    try{
+        const response = await axios.post('http://localhost:3001/api/v1/users/bulkCreate', {
+            users: users
+        },
+        {
+            headers: {
+                token,
+            },
+        });
+
+        return (response.status === 200);
+    }catch (e) {
+        console.error(e);
+        return e.response.data.non_registered_details;
+    }
+}
 
 export default {
     handleLogin,
@@ -175,4 +192,5 @@ export default {
     updateUser,
     getAllUsers,
     getFilterUsers,
+    bulkCrateUsers,
 };
