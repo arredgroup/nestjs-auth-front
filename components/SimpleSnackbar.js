@@ -8,13 +8,12 @@ const SimpleSnackbar = (props)  => {
     const { message, openSnack, closeSnack } = props;
 
     const handleClose = (event, reason) => {
-        event.preventDefault();
         if (reason === 'clickaway') {
-            return;
+          return;
         }
-
+      
         closeSnack();
-    };
+      };
 
     const action = (
         <React.Fragment>
