@@ -1,0 +1,11 @@
+@import '../globals.css';
+
+.form {
+    background: var(--primary-100);
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.input-form {
+    margin: 1rem;
+}

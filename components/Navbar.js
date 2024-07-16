@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 import './Navbar.css';
 import Button from '@mui/material/Button';
-import AuthService from '@/services/AuthService';
+import MockAuthService from '@/services/MockAuthService';
 import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
     const router = useRouter();
-    const [user, setUser] = useState({name:""});
+    const [user, setUser] = useState({ name: "" });
 
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem('user')));
@@ -14,8 +15,10 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         const token = localStorage.getItem('token');
-        const result = await AuthService.logOut(token);
-        if(result){
+        const result = await MockAuthService.logOut(token);
+        if (result) {
+            localStorage.removeItem('user'); 
+            localStorage.removeItem('token');
             router.push('/login');
         }
     }

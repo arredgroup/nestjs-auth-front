@@ -1,16 +1,17 @@
+
 "use client"
-import React, {useState} from 'react';
-import {Card, CardContent, Container} from "@mui/material";
+import React, { useState } from 'react';
+import { Card, CardContent, Container } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 import { useRouter } from 'next/navigation';
 
-import AuthService from '../../services/AuthService';
+import MockAuthService from '../../services/MockAuthService';
 
 import './page.css';
 
-export default function Login(){
+export default function Login() {
     const router = useRouter();
 
     const [email, setEmail] = useState("");
@@ -18,9 +19,9 @@ export default function Login(){
     const [state, setState] = useState(true);
 
     const handleLogin = async () => {
-        const login = await AuthService.handleLogin(email, password);
+        const login = await MockAuthService.handleLogin(email, password);
         setState(login);
-        if(login){
+        if (login) {
             router.push('/users');
         }
     }
@@ -37,13 +38,13 @@ export default function Login(){
                         <h1>Inicia Sesión</h1>
                     </div>
                     <SimpleSnackbar message={"Usuario o contraseña incorrectos"} openSnack={!state}
-                                    closeSnack={() => setState(true)}/>
+                        closeSnack={() => setState(true)} />
                     <div className={"login-box-child"}>
                         <TextField
                             id="outlined-basic"
                             label="Email"
                             variant="outlined"
-                            placeholder="alfa@beta.cl"
+                            placeholder="Correo@ulagos.cl"
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
@@ -51,7 +52,7 @@ export default function Login(){
                     <div className={"login-box-child"}>
                         <TextField
                             id="outlined-basic"
-                            label="Password"
+                            label="Contraseña"
                             variant="outlined"
                             placeholder="*********"
                             type="password"
