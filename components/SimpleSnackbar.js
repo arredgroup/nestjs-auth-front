@@ -12,7 +12,6 @@ const SimpleSnackbar = (props)  => {
         if (reason === 'clickaway') {
             return;
         }
-
         closeSnack();
     };
 

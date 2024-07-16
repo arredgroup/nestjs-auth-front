@@ -27,7 +27,6 @@ const Navbar = () => {
             </div>
             <div className="navbar-item">
                 <Button variant="contained" onClick={handleLogout}>
-                    
                     Logout
                 </Button>
             </div>
