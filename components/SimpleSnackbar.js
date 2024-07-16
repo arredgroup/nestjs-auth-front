@@ -1,14 +1,21 @@
 "use client"
 import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-const SimpleSnackbar = (props)  => {
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const SimpleSnackbar = (props) => {
     const { message, openSnack, closeSnack } = props;
 
     const handleClose = (event, reason) => {
-        event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
         if (reason === 'clickaway') {
             return;
         }
@@ -35,9 +42,12 @@ const SimpleSnackbar = (props)  => {
                 open={openSnack}
                 autoHideDuration={6000}
                 onClose={handleClose}
-                message={message}
-                //action={action}
-            />
+                action={action}
+            >
+                <Alert onClose={handleClose} severity="error">
+                    {message}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

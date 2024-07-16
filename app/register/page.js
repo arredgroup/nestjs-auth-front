@@ -1,104 +1,83 @@
 "use client"
 import React from "react";
-import {Card, CardContent, Container} from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Container, Button } from "@mui/material";
 import SimpleSnackbar from "@/components/SimpleSnackbar";
 import AuthService from "@/services/AuthService";
+import RegisterForm from "@/components/registerForm";
+import { useRouter } from 'next/navigation';
 
 import './page.css';
 
 const Register = () => {
-    // Register from user -> name, email, password, cellphone
-    const [name, setName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [password_second, setPasswordSecond] = React.useState("");
-    const [cellphone, setCellphone] = React.useState("");
-
+    const [forms, setForms] = React.useState([{ id: 0, formData: {}, errors: {} }]);
     const [message, setMessage] = React.useState("");
     const [openSnack, setOpenSnack] = React.useState(false);
-    const handleRegister = async () => {
-        if(password !== password_second){
-            setMessage("Las contraseñas no coinciden");
+    const router = useRouter();
+
+    const updateFormData = (id, data) => {
+        setForms(forms.map(form => form.id === id ? { ...form, formData: data } : form));
+    };
+
+    const handleRegisterAll = async () => {
+        const newForms = forms.map((form) => {
+            const newErrors = {};
+            if (!form.formData.name) newErrors.name = "Este campo es obligatorio.";
+            if (!form.formData.email) newErrors.email = "Este campo es obligatorio.";
+            if (!form.formData.password) newErrors.password = "Este campo es obligatorio.";
+            if (form.formData.password !== form.formData.password_second) newErrors.password_second = "Las contraseñas no coinciden.";
+            if (!form.formData.cellphone) newErrors.cellphone = "Este campo es obligatorio.";
+            return { ...form, errors: newErrors };
+        });
+
+        setForms(newForms);
+
+        const hasErrors = newForms.some(form => Object.keys(form.errors).length > 0);
+        if (hasErrors) {
+            setMessage("Todos los campos deben ser completados correctamente.");
             setOpenSnack(true);
             return;
         }
-        const response = await AuthService.registerUser(name, email, password, password_second, cellphone);
-        if(!response){
-            setMessage("Error al registrar usuario");
-            setOpenSnack(true);
-        } else {
-            setMessage("Usuario Registrado Exitosamente!");
-            setOpenSnack(true);
+
+        for (const form of forms) {
+            const { name, email, password, password_second, cellphone } = form.formData;
+            const response = await AuthService.registerUser(name, email, password, password_second, cellphone);
+            if (!response) {
+                setMessage(`Error al registrar usuario ${form.id + 1}`);
+                setOpenSnack(true);
+                return;
+            }
         }
-    }
+
+        setMessage("Todos los usuarios registrados exitosamente!");
+        setOpenSnack(true);
+    };
+
+    const handleBack = () => {
+        router.push('/login');
+    };
 
     return (
         <Container>
-            <SimpleSnackbar message={message} openSnack={openSnack} closeSnack={() => {setOpenSnack(!openSnack)}}/>
-            <Card className="form">
-                <CardContent>
-                    <h1>Register User</h1>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Nombre"
-                            variant="outlined"
-                            required
-                            placeholder="Oleh Oleig"
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Email"
-                            variant="outlined"
-                            required
-                            placeholder="alfa@beta.cl"
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Contraseña"
-                            variant="outlined"
-                            required
-                            type="password"
-                            placeholder="****"
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Confirmar Contraseña"
-                            variant="outlined"
-                            type="password"
-                            required
-                            placeholder="****"
-                            onChange={(e) => setPasswordSecond(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="Teléfono"
-                            variant="outlined"
-                            required
-                            placeholder="+56987654321"
-                            onChange={(e) => setCellphone(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-form">
-                        <Button variant="contained" onClick={handleRegister}>Registrar</Button>
-                    </div>
-                </CardContent>
-            </Card>
+            <SimpleSnackbar
+                message={message}
+                openSnack={openSnack}
+                closeSnack={() => { setOpenSnack(!openSnack); }}
+            />
+            {forms.map((form, index) => (
+                <div key={index}>
+                    <RegisterForm
+                        index={index}
+                        formData={form.formData}
+                        errors={form.errors}
+                        updateFormData={updateFormData}
+                    />
+                </div>
+            ))}
+            <Button onClick={handleRegisterAll} variant="contained" color="success">Registrar</Button>
+            <Button onClick={handleBack} variant="contained" color="secondary">Anterior</Button>
         </Container>
-    )
-}
+
+    );
+};
 
 export default Register;
