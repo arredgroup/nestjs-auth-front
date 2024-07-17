@@ -1,5 +1,22 @@
 import axios from 'axios';
 
+
+const AuthService = {
+    // ... otros métodos
+
+    bulkUploadUsers: async (users) => {
+        try {
+            const response = await axios.post('/api/users/bulk-upload', { users });
+            return response.data.success;
+        } catch (error) {
+            console.error('Error en la carga masiva de usuarios', error);
+            return false;
+        }
+    },
+};
+
+
+
 const handleLogin = async (user, pass) => {
     try{
         const response = await axios.post('http://localhost:3001/api/v1/auth/login', {
@@ -121,4 +138,5 @@ export default {
     logOut,
     registerUser,
     updateUser,
+    AuthService,
 };
